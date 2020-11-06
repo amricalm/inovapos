@@ -1,0 +1,1 @@
+[{"no_faktur":"TX130424330         ","tgl":"2013\/4\/21","ket":" ","kd_gudang_asal":"0001                ","kd_gudang_tujuan":"3004                ","ref":" ","st_dokumen":null}]

@@ -1,0 +1,84 @@
+* {
+	padding:0px;
+	margin:0px;
+}
+
+*:focus {outline: none;}
+
+a img { border:0px; }
+
+body {
+	font-family: 'Ubuntu', arial, serif;
+}
+
+a {
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration:underline;	
+}
+
+.container {
+	width:350px;
+	margin:100px auto;
+	background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #AAAAAA;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    box-shadow: 0 0 6px #999999;
+    -moz-box-shadow: 0 0 6px #999999;
+    -webkit-box-shadow: 0 0 6px #999999;
+	background:#005192 url("../img/bg.jpg") -10px;
+}
+
+.content {
+	padding:5px;
+}
+
+.welcome {
+	font-weight:normal;
+	padding-top:12px;
+	font-size:22px;
+	color:white;
+	padding-left:20px;
+}
+
+.form {
+	margin:8px;
+    border-radius: 5px;
+	padding:8px;
+	color:white;
+}
+
+input[type="text"],input[type="password"]  {
+    background: url("../img/bkd_field.gif") repeat-x scroll center top #FFFFFF;
+    border-color: #7C7C7C #C3C3C3 #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    color: #222222;    
+	border-radius:4px;
+	font-size: 14px;
+	margin-bottom:10px;
+    padding: 3px;
+    width: 305px;
+}
+
+.submit {
+	padding: 3px;
+	margin-top:10px;
+}
+
+.header {
+	height:46px;
+	border-bottom:1px dotted white;
+}
+
+.link {
+	color:white;
+	display:block;
+	line-height:17px;
+	margin-left:3px;
+	font-size:13px;
+}
