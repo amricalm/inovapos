@@ -33,25 +33,33 @@ class App_model extends CI_Model
             case 'besar' :
                 $menu                       = array(
                                             1   => array('nama'=>'Dashboard','link'=>base_url().'index.php/home','ikon'=>'','extra'=>'','detail'=>array()),
+                                            // 2   => array('nama'=>'Barang','link'=>base_url().'index.php/barang','ikon'=>'','extra'=>'','detail'=>array()),
                                             2   => array('nama'=>'Barang','link'=>base_url().'index.php/barang','ikon'=>'','extra'=>'','detail'=>array(
-                                                1   => array('nama'=>'Barang Biasa','link'=>base_url().'index.php/barang','ikon'=>'','extra'=>''),
-                                                2   => array('nama'=>'Barang Elektrik','link'=>base_url().'index.php/barang/daftar_elektrik','ikon'=>'','extra'=>'')
+                                                1   => array('nama'=>'Barang','link'=>base_url().'index.php/barang','ikon'=>'','extra'=>''),
+                                                2   => array('nama'=>'Group Barang','link'=>base_url().'index.php/barang/group_barang','ikon'=>'','extra'=>'')
+                                                // 2   => array('nama'=>'Barang Elektrik','link'=>base_url().'index.php/barang/daftar_elektrik','ikon'=>'','extra'=>'')
                                             )),
-                                            3   => array('nama'=>'Transaksi','link'=>'#','ikon'=>'','extra'=>'id="kasir"','detail'=>array(
-                                                1   => array('nama'=>'Kasir','link'=>base_url().'index.php/kasir/kasir_temp?iframe=true&amp;width=100%&amp;height=100%','ikon'=>'','extra'=>'id="kasir" rel="prettyPhoto[iframe]"'),
-                                                2   => array('nama'=>'Kasir Elektrik','link'=>base_url().'index.php/kasir/kasir_elektrik?iframe=true&amp;width=100%&amp;height=100%','ikon'=>'','extra'=>'id="kasir_elektrik" rel="prettyPhoto[iframe]"'),
-                                                3   => array('nama'=>'Tukar Barang','link'=>base_url().'index.php/tukar/input?iframe=true&amp;width=100%&amp;height=100%%','ikon'=>'','extra'=>'id="tukar_barang" rel="prettyPhoto[iframe]"')
-                                            )),
+                                            3   => array('nama'=>'Kasir','link'=>base_url().'index.php/kasir/kasir_temp?iframe=true&amp;width=100%&amp;height=100%','ikon'=>'','extra'=>'id="kasir" rel="prettyPhoto[iframe]"','detail'=>array()),
+                                            // 3   => array('nama'=>'Kasir','link'=>'#','ikon'=>'','extra'=>'id="kasir"','detail'=>array(
+                                            //     1   => array('nama'=>'Kasir','link'=>base_url().'index.php/kasir/kasir_temp?iframe=true&amp;width=100%&amp;height=100%','ikon'=>'','extra'=>'id="kasir" rel="prettyPhoto[iframe]"'),
+                                            //     2   => array('nama'=>'Kasir Elektrik','link'=>base_url().'index.php/kasir/kasir_elektrik?iframe=true&amp;width=100%&amp;height=100%','ikon'=>'','extra'=>'id="kasir_elektrik" rel="prettyPhoto[iframe]"'),
+                                            //     3   => array('nama'=>'Tukar Barang','link'=>base_url().'index.php/tukar/input?iframe=true&amp;width=100%&amp;height=100%%','ikon'=>'','extra'=>'id="tukar_barang" rel="prettyPhoto[iframe]"')
+                                            // )),
                                             4   => array('nama'=>'Pelanggan','link'=>base_url().'index.php/pelanggan','ikon'=>'','extra'=>'id="pelanggan"','detail'=>array()),
                                             5   => array('nama'=>'Stok','link'=>'#','ikon'=>'','extra'=>'','detail'=>array(
                                                 1   => array('nama'=>'Awal','link'=>base_url().'index.php/barang/stok_opname','ikon'=>'','extra'=>''),
-                                                2   => array('nama'=>'Opname','link'=>base_url().'index.php/barang/stok_penyesuaian','ikon'=>'','extra'=>'')
+                                                2   => array('nama'=>'Opname','link'=>base_url().'index.php/barang/stok_penyesuaian','ikon'=>'','extra'=>''),
+                                                3   => array('nama'=>'Kartu Stock','link'=>base_url().'index.php/barang/kartu_stock','ikon'=>'','extra'=>'')
                                             )),
-                                            6   => array('nama'=>'Sinkronisasi','link'=>base_url().'index.php/sinkronisasi','ikon'=>'','extra'=>'','detail'=>array(
-                                                1   => array('nama'=>'Update Harga','link'=>base_url().'index.php/sinkronisasi/halaman_update','ikon'=>'','extra'=>''),
-                                                2   => array('nama'=>'Stok','link'=>base_url().'index.php/sinkronisasi/halaman_stok','ikon'=>'','extra'=>''),
-                                                3   => array('nama'=>'Mutasi Barang','link'=>base_url().'index.php/sinkronisasi/halaman_mutasi','ikon'=>'','extra'=>''),
+                                            6   => array('nama'=>'Laporan','link'=>base_url().'index.php/laporan/penjualan','ikon'=>'','extra'=>'','detail'=>array(
+                                                1   => array('nama'=>'Laporan Penjualan','link'=>base_url().'index.php/laporan/penjualan','ikon'=>'','extra'=>''),
+                                                2   => array('nama'=>'Rekap Penjualan','link'=>base_url().'index.php/laporan/rekap_penjualan','ikon'=>'','extra'=>'')
                                             )),
+                                            // 7   => array('nama'=>'Sinkronisasi','link'=>base_url().'index.php/sinkronisasi','ikon'=>'','extra'=>'','detail'=>array(
+                                            //     1   => array('nama'=>'Update Harga','link'=>base_url().'index.php/sinkronisasi/halaman_update','ikon'=>'','extra'=>''),
+                                            //     2   => array('nama'=>'Stok','link'=>base_url().'index.php/sinkronisasi/halaman_stok','ikon'=>'','extra'=>''),
+                                            //     3   => array('nama'=>'Mutasi Barang','link'=>base_url().'index.php/sinkronisasi/halaman_mutasi','ikon'=>'','extra'=>''),
+                                            // )),
                                             7   => array('nama'=>'Pengguna','link'=>base_url().'index.php/user','ikon'=>'','extra'=>'id="pengguna"','detail'=>array()),
                                             8   => array('nama'=>'Tutup Shift','link'=>base_url().'index.php/tutup_shift','ikon'=>'','extra'=>'','detail'=>array())
                                             );
@@ -75,11 +83,11 @@ class App_model extends CI_Model
                 $menu                       = array(
                                             1   => array('nama'=>'Barang','link'=>base_url().'index.php/barang','ikon'=>'barang.png','extra'=>''),
                                             2   => array('nama'=>'Kasir','link'=>base_url().'index.php/kasir/kasir_temp?iframe=true&amp;width=100%&amp;height=100%','ikon'=>'keranjang.png','extra'=>'rel="prettyPhoto[iframe]"'),
-                                            3   => array('nama'=>'Kasir Elektrik','link'=>base_url().'index.php/kasir/kasir_elektrik?iframe=true&amp;width=100%&amp;height=100%','ikon'=>'keranjang_elektrik.png','extra'=>'rel="prettyPhoto[iframe]"'),
-                                            4   => array('nama'=>'Keamanan','link'=>'#','ikon'=>'kunci.png','extra'=>''),
-                                            5   => array('nama'=>'Penjualan','link'=>base_url().'index.php/laporan/penjualan','ikon'=>'Crystal_Clear_files.gif','extra'=>''),
-                                            6   => array('nama'=>'Sinkronisasi','link'=>base_url().'index.php/sinkronisasi','ikon'=>'sync.png','extra'=>''),
-                                            7   => array('nama'=>'Absen','link'=>base_url().'index.php/karyawan/absen','ikon'=>'Crystal_Clear_calendar.gif','extra'=>'')
+                                            // 3   => array('nama'=>'Kasir Elektrik','link'=>base_url().'index.php/kasir/kasir_elektrik?iframe=true&amp;width=100%&amp;height=100%','ikon'=>'keranjang_elektrik.png','extra'=>'rel="prettyPhoto[iframe]"'),
+                                            3   => array('nama'=>'Keamanan','link'=>'#','ikon'=>'kunci.png','extra'=>''),
+                                            4   => array('nama'=>'Penjualan','link'=>base_url().'index.php/laporan/penjualan','ikon'=>'Crystal_Clear_files.gif','extra'=>''),
+                                            // 6   => array('nama'=>'Sinkronisasi','link'=>base_url().'index.php/sinkronisasi','ikon'=>'sync.png','extra'=>''),
+                                            // 7   => array('nama'=>'Absen','link'=>base_url().'index.php/karyawan/absen','ikon'=>'Crystal_Clear_calendar.gif','extra'=>'')
                                             );
                 break;
         }

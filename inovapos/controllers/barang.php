@@ -973,6 +973,11 @@ class Barang extends CI_Controller
         $data                       = $this->app_model->general();
         switch($trx)
         {
+            case 'tambah' :
+                $data['option_tampilan']        = 'tanpa_menu';
+                $data['halaman']                = 'barang/tambah';
+                $this->load->view('layout/index',$data);
+                break;
             case 'edit' :
                 if($this->session->userdata('user_nm')=='' || $this->session->userdata('user_group')=="Kasir" || $this->session->userdata('user_group')=='SPV')
                 {
@@ -982,6 +987,9 @@ class Barang extends CI_Controller
                 $data['halaman']                = 'barang/edit';
                 $data['data']                   = $this->barang_model->get($this->uri->segment(4),'','','');
                 $this->load->view('layout/index',$data);
+                break;
+            case 'hapus' :
+                $this->barang_exec($trx,$this->uri->segment(4));
                 break;
         }
     }
@@ -1005,13 +1013,30 @@ class Barang extends CI_Controller
     function barang_exec($trx)
     {
         $hargasebelumnya                        = $this->barang_model->get($this->input->post('barang_kd'),'','','','','')->row()->barang_harga_jual;
+        $data['barang_barcode']                 = $this->input->post('barcode_barang');
+        $data['barang_kd']                      = $this->input->post('kd_barang');
+        $data['barang_nm']                      = $this->input->post('nm_barang');
+        $data['barang_group']                   = $this->input->post('kd_group');
+        $data['barang_satuan']                  = $this->input->post('kd_satuan');
+        $data['barang_stok_min']                = $this->input->post('stok_min_barang');
         $data['barang_harga_jual']              = $this->input->post('barang_harga_jual');
         switch($trx)
         {
+            case 'tambah' :
+                $data['uid']                = $this->session->userdata('user_kd');
+                $data['doe']                = date('Y-m-d h:i:s');
+                if($this->barang_model->simpan($data))
+                {
+                    echo '<script type="text/javascript">alert("Berhasil disimpan!");parent.iclose();</script>';
+                }
+                else
+                {
+                    echo '<script type="text/javascript">alert("Gagal disimpan");</script>';
+                }
+                break;
             case 'edit' :
                 if($this->barang_model->update($this->input->post('barang_kd'),$data))
                 {
-                    $this->cetak_update_harga($this->input->post('barang_kd'));
                     $log['log_col']             = 'UPDATE HARGA MANUAL';
                     $log['log_val']             = $this->input->post('barang_kd').'#'.$hargasebelumnya.'#'.$data['barang_harga_jual'];
                     $log['tgl']                 = $this->session->userdata('tanggal').' '.date('H:i:s');
@@ -1027,6 +1052,10 @@ class Barang extends CI_Controller
                     echo '<script type="text/javascript">alert("Gagal diupdate");</script>';
                 }
                 break;
+            case 'hapus' :
+                    $this->barang_model->hapus($this->uri->segment(4));
+                    redirect('barang/daftar');
+                    break;
         }
     }
     function barang_elektrik_exec($trx)

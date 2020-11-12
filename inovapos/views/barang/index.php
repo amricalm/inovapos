@@ -1,9 +1,9 @@
 <div class="grid_12">
-    <!--<div class="float-right">
+    <div class="float-right">
         <a href="<?php echo base_url() ?>index.php/barang/barang_form/tambah?iframe=true&amp;width=800&amp;height=600" rel="prettyPhoto[iframe]" class="button">
         	<span>Tambah Barang <img src="<?php echo $base_img ?>/plus-small.gif" width="12" height="9" /></span>
         </a>
-    </div>-->
+    </div>
     <form action="<?php echo base_url() ?>index.php/barang/daftar" method="POST">
         <table width="100%">
             <tr>
@@ -29,13 +29,14 @@
             	<thead>
                     <tr>
                         <th style="width:2%;text-align:center;">#</th>
-                        <th style="width:18%">Kode Barang</th>
-                        <th style="width:18%">Nama Barang</th>
-                        <th style="width:20%">Grup</th>
+                        <th style="width:10%">Kode Barang</th>
+                        <th style="width:10%">Barcode</th>
+                        <th style="width:20%">Nama Barang</th>
                         <th style="width:8%">Satuan</th>
-                        <th style="width:8%;">Stok</th>
-                        <th style="width:9%">Harga</th>
-                        <?php if($this->session->userdata('user_group')!='Kasir') { ?><th style="width:2%"></th><?php } ?>
+                        <th style="width:8%">Grup</th>
+                        <th style="width:8%">Stok</th>
+                        <th style="width:10%">Harga Jual</th>
+                        <?php if($this->session->userdata('user_group')!='Kasir') { ?><th style="width:4%"></th><?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,9 +48,10 @@
                     <tr>
                         <td class="align-center"><?php echo $seq ?></td>
                         <td><?php echo $rowbarang->barang_kd ?></td>
+                        <td><?php echo $rowbarang->barang_barcode ?></td>
                         <td><?php echo $rowbarang->barang_nm ?></td>
-                        <td><?php echo $rowbarang->group_nm ?></td>
                         <td><?php echo $rowbarang->satuan_nm ?></td>
+                        <td><?php echo $rowbarang->group_nm ?></td>
                         <td><?php 
                             //$hasil = /*$this->barang_saldo_model->get_saldox($rowbarang->barang_kd)*/$this->barang_saldo_model->kartu_stok($rowbarang->barang_kd,$this->session->userdata('tanggal'));echo $hasil['saldo']+$hasil['masuk']-$hasil['keluar']
                             if($rowbarang->group_elektrik=='' || $rowbarang->group_elektrik=='0')
@@ -74,7 +76,7 @@
                         <td style="text-align: right;"><?php echo number_format($rowbarang->barang_harga_jual,0,',','.') ?></td>
                         <?php if($this->session->userdata('user_group')!='Kasir' && $this->session->userdata('user_group')!='SPV') { ?><td>
                             <a href="<?php echo base_url() ?>index.php/barang/barang_form/edit/<?php echo $rowbarang->barang_kd; ?>?iframe=true&amp;width=800&amp;height=600" rel="prettyPhoto[iframe]"><img src="<?php echo $base_img ?>/pencil.gif" width="16" height="16" /></a>
-                            <!--<a href="<?php echo base_url() ?>index.php/barang/barang_form/hapus/<?php echo $rowbarang->barang_kd; ?>" onclick="return hapus()"><img src="<?php echo $base_img ?>/bin.gif" width="16" height="16" alt="delete" /></a>-->
+                            <a href="<?php echo base_url() ?>index.php/barang/barang_form/hapus/<?php echo $rowbarang->barang_kd; ?>" onclick="return hapus()"><img src="<?php echo $base_img ?>/bin.gif" width="16" height="16" alt="delete" /></a>
                         </td><?php } ?>
                     </tr>
                     <?php 

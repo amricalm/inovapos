@@ -714,6 +714,8 @@ class Barang_saldo_model extends CI_Model
                                             WHERE saldo_barang = '$kodebarang'
                                             AND saldo_tgl = '$tglsekarang'
                                             AND saldo_shift = '$shiftsekarang'";
+        
+                
                 $qtysaldoawal               = ($this->db->query($saldo_awal)->num_rows()>0) ? $this->db->query($saldo_awal)->row()->qty : 0;
                 $penjualan                  = " SELECT IFNULL(SUM(qty),0) AS qty
                                             FROM ac_tjual_dtl dtl
@@ -786,6 +788,7 @@ class Barang_saldo_model extends CI_Model
             }
             $i++;
         }
+        // echo $this->db->last_query();
         return $data;
     }
     function saldo_hari($kdbarang='',$tgl='',$shift='')
