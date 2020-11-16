@@ -733,7 +733,7 @@ class Tutup_shift extends CI_Controller
                 $dataSaldoAwal['saldo_tgl']     = $data[$i]['saldo_tgl'];
                 $dataSaldoAwal['saldo_shift']   = $data[$i]['saldo_shift'];
                 $this->barang_saldo_model->update($dataSaldoAwal);
-                echo $this->db->last_query();
+                // echo $this->db->last_query();
                 echo '<br/>';
                 //$this->db->query('truncate table im_tsaldo_barang');
                 //$this->db->query('truncate table im_tsaldo_barang_dtl');

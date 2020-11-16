@@ -706,7 +706,7 @@ class Sinkronisasi extends CI_Controller
                                         $this->barang_mutasi_model->simpan_dtl_imei($datainputdtlimei);
                                         //echo $k;
                                         $cekimei                    = $this->barang_imei_model->get($datainputdtlimei['kd_barang'],$datainputdtlimei['imei'],'');
-                                        echo $this->db->last_query();
+                                        // echo $this->db->last_query();
                                         if($cekimei->num_rows() > 0)
                                         {
                                             $imeibarang['imei_barang']      = $datainputdtlimei['kd_barang'];

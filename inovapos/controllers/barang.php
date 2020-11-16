@@ -402,7 +402,7 @@ class Barang extends CI_Controller
     {
         $jmh_stok   = 0;
         $hp         = 0;
-        $error                      = '';
+        $error      = '';
 
         $kd_barang              = $this->input->post('saldo_barang');
         $tgl                    = $this->input->post('saldo_tgl');

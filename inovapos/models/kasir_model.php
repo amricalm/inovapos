@@ -227,7 +227,7 @@ class Kasir_model extends CI_Model
         
         $this->db->where("date(tgl) between '".$tgl."' ",'',false);
         $urutan1                = $this->db->get('history_ac_tjual');
-        return $this->db->last_query();die();
+        // return $this->db->last_query();die();
         
         $seq                    = 0;
         foreach($urutan1->result() as $rowurutan1)
