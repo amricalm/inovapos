@@ -45,7 +45,6 @@ class Barang extends CI_Controller
         $config                     = $this->adnpagination->config($base_url,$total_rows,$per_page,$uri_segment);
         $this->pagination->initialize($config); 
         $data['data']               = $this->barang_model->get('',$per_page,$offset,$data['txtcari'],$data['cbogrup']);
-        //echo $this->db->last_query();
         $data['data_group']         = $this->group_barang_model->get('','','','');
         $data['halaman']            = 'barang/index';
         $data['judulweb']           = ' | Daftar Barang';
@@ -157,6 +156,33 @@ class Barang extends CI_Controller
         $data['data']               = $this->barang_model->get_elektrik('',$per_page,$offset,$data['txtcari']);
         //echo $this->db->last_query();
         
+        $this->load->view('layout/index',$data);
+    }
+    function list_barang_doang_temp($elemen=0,$offset=0)
+    {
+        $data                       = $this->app_model->general();
+        $data['option_tampilan']    = 'tanpa_menu';
+        $data['halaman']            = 'list_barang_doang_temp';
+        $txtcari                    = ($this->input->post('submit')!='') ? $this->input->post('search') : $this->session->userdata('txtcaribarang');
+        $this->session->set_userdata(array('txtcaribarang'=>$txtcari));
+        $grup                       = ($this->input->post('submit')!='') ? $this->input->post('grup') : $this->session->userdata('cbogrupbarang');
+        $this->session->set_userdata(array('cbogrupbarang'=>$grup));
+        $data['txtcari']            = $this->session->userdata('txtcaribarang');
+        $data['cbogrup']            = $this->session->userdata('cbogrupbarang');
+
+        $data['data_all']           = $this->barang_model->get('','','',$data['txtcari'],$data['cbogrup']);
+        $base_url                   = base_url().'index.php/barang/list_barang_temp/'.$elemen;
+        $total_rows                 = $data['data_all']->num_rows();
+        $per_page                   = 30;
+        $uri_segment                = 4;
+        
+        $config                     = $this->adnpagination->config($base_url,$total_rows,$per_page,$uri_segment);
+        $this->pagination->initialize($config); 
+
+
+        $data['data_group']         = $this->group_barang_model->get('','','','');
+        $data['data']               = $this->barang_model->get('',$per_page,$offset,$data['txtcari'],$data['cbogrup']);
+
         $this->load->view('layout/index',$data);
     }
     function list_imei($kdbarang)
@@ -271,13 +297,13 @@ class Barang extends CI_Controller
     {
         $this->load->model('barang_saldo_model', 'saldo');
         $barang =  $this->barang_model->get($kd,'','','');
-        //echo $this->db->last_query();
+        // echo $this->db->last_query();
         if($barang->num_rows()>0)
         { 
             $saldo  = $this->saldo->saldo_hari_ini($kd);
             if($saldo[0]['saldo_qty']!='0')
             {
-                echo 'S#'.$barang->row()->barang_kd.'#'.$barang->row()->barang_nm.'#' . ($saldo[0]['saldo_qty']) .'#'.$barang->row()->barang_harga_jual.'#'.$barang->row()->barang_group.'#'.$barang->row()->group_hp.'#'.$barang->row()->group_elektrik;
+                echo 'S#'.$barang->row()->barang_kd.'#'.$barang->row()->barang_nm.'#' . ($saldo[0]['saldo_qty']) .'#'.$barang->row()->barang_harga_jual.'#'.$barang->row()->barang_group.'#'.$barang->row()->group_hp.'#'.$barang->row()->group_elektrik.'#'.$barang->row()->barang_satuan;
             }
             else
             {

@@ -204,7 +204,7 @@ class Tutup_shift extends CI_Controller
     }
     
     function close_transaction($cekpenjualan)
-    {
+    { echo "test"; die();
         $this->db->trans_begin();
         $terus              = false;
         if($cekpenjualan=='')

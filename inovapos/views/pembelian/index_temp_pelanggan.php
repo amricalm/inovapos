@@ -1,6 +1,6 @@
 <style type="text/css">
  #myTable tr td input{ border:none; width:95%;font-size:12px;background:none; }
- textarea.barangnm { border:none; width:95%; font-family:Arial;font-size:12px; height:50px; background:none; }
+ .barangnm { border:none; width:95%; font-size:12px; background:none; }
  .kiri { text-align:left; }
  .kanan { text-align:right; }
  .tengah { text-align:center; }
@@ -8,80 +8,80 @@
  td.bawah { vertical-align:bottom; }
 </style>
 <div id="hasil"></div>
-<form action="<?php echo base_url() ?>index.php/kasir/simpan/" method="POST" name="frmKasir" id="frmKasir">
+<form action="<?php echo base_url() ?>index.php/pembelian/simpan_temp_pelanggan/" method="POST" name="frmKasir" id="frmKasir">
     <div class="grid_12">
-        <div class="float-right">
-            <label style="color: red;font-size:15px; font-weight: bold">
-                Kasir : <?php echo $this->session->userdata('user_nm'); ?>&nbsp;|&nbsp;
-                <?php echo $this->adntgl->tgl_panjang($this->session->userdata('tanggal')); ?>&nbsp;|&nbsp;
-                <span id="clock"></span>
-            </label>
+        <div>
+            <label style="font-size:24px; font-weight: bold">Pembelian</label>
         </div>
-        <p>
-            <label>Total </label>
-            <input type="text" name="total" value="0" id="total" class="input-long angka" style="font-size:80px;text-align:right;width:100%" />
-        </p>
         </script>
+        <div class="grid_12">       
+            <table style="width:100%;padding:0">
+                <tr>
+                    <td>No. Faktur</td>
+                    <td>
+                        <input type="text" name="faktur_no" id="faktur_no" class="input-long" required/>
+                    </td>
+                    <td>Tanggal</td>
+                    <td><input type="text" name="tanggal" id="tanggal" class="tgl input-medium" required/></td>
+                    <td>Keterangan</td>
+                    <td><input type="text" name="ket" id="ket" class="input-long" style="width:100%;"/></td>
+                </tr>
+            </table>
+        </div>
+        <hr>
+        <div class="grid_12">       
+            <table style="width:100%;padding:0">
+                <tr>
+                    <td>Kode Barang</td>
+                    <td>
+                        <input type="text" name="barang_kd" id="barang_kd" class="input-long" />
+                        <input type="hidden" name="barang_grup" id="barang_grup" class="input-long" />
+                    </td>
+                    <td>Nama Barang</td>
+                    <td colspan="6"><input type="text" name="barang_nm" id="barang_nm" class="input-long" style="width:100%;" disabled="disabled" /></td>
+                </tr>
+                <tr><td>&nbsp;</td></tr>
+                <tr>
+                    <td>Qty</td>
+                    <td><input type="text" name="qty" id="qty" class="qty1000 input-long " /></td>
+                    <td>Satuan</td>
+                    <td><input type="text" name="barang_satuan" id="barang_satuan" class="input-long" disabled="disabled" /></td>
+                    <td>Harga</td>
+                    <td><input type="text" name="barang_harga_beli" id="barang_harga_beli" class="input-long"/></td>
+                    <td>Diskon</td>
+                    <td><input type="text" name="diskon" id="diskon" class="qty100 input-long " />&nbsp;(%)</td>
+                </tr>
+            </table>
+        </div>
         <div class="module">
         	<h2><span>Daftar Barang</span></h2>
             <div class="module-table-body" style="min-height: 250px;">
-
-        <div class="scroll-pane horizontal-only" style="border:1px solid #999999;vertical-align:top">
-            <p style="height: 250%;margin-top: 0px">
-                <table id="myTable" class="tablesorter">
-                    <tr>
-                        <th style="width:2%;text-align:center;">#</th>
-                        <th style="width:15%">Kode Barang</th>
-                        <th style="width:34%">Nama Barang</th>
-                        <th style="width:5%">Qty</th>
-                        <th style="width:13%;text-align:right;">Harga</th>
-                        <th style="width:13%;text-align:right;">Diskon</th>
-                        <th style="width:13%;text-align:right;">Jumlah</th>
-                        <th style="width:5%"></th>
-                    </tr>
-                </table>
-            </p>
-        </div>
+                <div class="scroll-pane horizontal-only" style="border:1px solid #999999;vertical-align:top">
+                    <p style="height: 250%;margin-top: 0px">
+                        <table id="myTable" class="tablesorter">
+                            <tr>
+                                <th style="width:2%;text-align:center;">#</th>
+                                <th style="width:15%">Kode Barang</th>
+                                <th style="width:34%">Nama Barang</th>
+                                <th style="width:5%">Qty</th>
+                                <th style="width:13%;text-align:right;">Harga</th>
+                                <th style="width:13%;text-align:right;">Diskon</th>
+                                <th style="width:13%;text-align:right;">Jumlah</th>
+                                <th style="width:5%"></th>
+                            </tr>
+                        </table>
+                    </p>
+                </div>
                 <div style="clear: both"></div>
              </div> <!-- End .module-table-body -->
         </div> <!-- End .module -->
-        <div class="grid_12">       
-                <table style="width:100%;padding:0">
-                    <!-- <tr>
-                        <td>IMEI</td>
-                        <td>
-                            <input type="text" name="imei" id="imei" class="input-long" />
-                        </td>
-                        <td colspan="2"></td>
-                        <td colspan="2"></td>
-                        <td colspan="2"></td>
-                    </tr> -->
-                    <input type="hidden" name="imei" id="imei" class="input-long" />
-                    <tr>
-                        <td>Barcode /<br>Kode Barang</td>
-                        <td>
-                            <input type="text" name="barang_kd" id="barang_kd" class="input-long" />
-                            <input type="hidden" name="barang_grup" id="barang_grup" class="input-long" />
-                        </td>
-                        <td>Nama Barang</td>
-                        <td><input type="text" name="barang_nm" id="barang_nm" class="input-long" disabled="disabled" /></td>
-                        <td>Stok</td>
-                        <td><input type="text" name="barang_stok" id="barang_stok" class="input-long" disabled="disabled" /></td>
-                        <td>Harga</td>
-                        <td><input type="text" name="barang_harga" id="barang_harga" class="input-long" disabled="disabled" /></td>
-                    </tr>
-                    <tr>
-                        <td>Qty</td>
-                        <td><input type="text" name="qty" id="qty" class="qty1000 input-long " /></td>
-                        <td>Diskon</td>
-                        <td><input type="text" name="diskon" id="diskon" class="qty100 input-long " />&nbsp;(%)</td>
-                        <!--<td><input type="checkbox" id="cbxPelanggan" name="cbxPelanggan" /></td>
-                        <td>Pelanggan</td>
-                        <td>Kode Pelanggan</td>
-                        <td><input type="text" name="kdPelanggan" id="kdPelanggan" disabled="disabled" class="input-long " /></td>-->
-                        <td colspan="4"></td>
-                    </tr>
-                </table>
+        <div class="grid_12">
+            <table style="width:100%;padding:0">
+                <tr>
+                    <td style="text-align:right; width:85%; padding-right:20px;font-weight:bold;">Total</td>
+                    <td whide="15%"><input type="text" name="total" value="0" id="total" class="input-long angka" style="text-align:right;width:100%;font-weight:bold;" disabled="disabled" /></td>
+                </tr>
+            </table>
             <span class="notification none renggang">
                 Tekan <span style="color: red;">F2</span> untuk Lookup Tabel.
                 Tekan tanda <span style="color: red;">panah ke atas atau ke bawah</span>, untuk mengalihkan kursor.
@@ -92,7 +92,7 @@
                 <?php } ?>
             </span>
             <div style="text-align:center;position:fixed;right:0px;bottom:0px;width:100%;">
-                <input type="button" value="Bayar" id="ButtonBayar" name="ButtonBayar" class="submit-green"/>
+                <input type="button" value="Simpan" id="ButtonSimpan" name="ButtonSimpan" class="submit-green"/>
             </div>
         </div>
     </div>
@@ -111,139 +111,22 @@
     <div id="proses" title="Sedang Proses, Mohon Tunggu!" style="text-align: center;vertical-align:center;">
         <img src="<?php echo $base_img.'/ajax-loader.gif'; ?>" />
     </div>
-    <!-- Dialog Kasir -->
-    <div id="form-bayar" title="Kasir : <?php echo $this->session->userdata('user_nm') ?> | <?php echo $this->adntgl->tgl_panjang(date('Y-m-d')); ?>">
-        <table style="width: 700px;">
-            <tr style="line-height:25px;">
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;"><?php echo form_checkbox('cbxpelanggan',1,false,'id="cbxpelanggan"'); ?> Pelanggan</div>
-                    <div style="float: right;"><input type="text" class="" id="idpelanggan" name="idpelanggan" style="padding:5px;text-align:right;font-size:20px" disabled="disabled"/></div>
-                </td>
-                <td style="width: 50%;"><div id="datapelanggan"></div>&nbsp;</td>                
-            </tr>            
-            <tr style="line-height:25px;">
-                <td colspan="2"><hr /></td>
-            </tr>
-            <tr style="line-height:25px;">
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;">Pembayaran </div>
-                    <div style="float: right;"><?php echo form_radio('term','Tunai',true,'id="term_tunai"').'&nbsp;Tunai&nbsp;'.form_radio('term','Kredit',false,'id="term_kredit"').'&nbsp;Kredit&nbsp;'.form_radio('term','Debit',false,'id="term_debit" ').'&nbsp;Debit&nbsp;'.form_radio('term','Leasing',false,'id="term_leasing" ').'&nbsp;Leasing&nbsp;'; ?></div>
-                </td>
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;">Jumlah Belanja</div>
-                    <div style="float: right;"><input type="text" class="angka" id="jmh_belanja" name="jmh_belanja" style="padding:3px;text-align:right;font-size:20px" disabled="disabled"/></div>
-                </td>            
-            </tr>    
-            <tr style="line-height:25px;">
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;"><span id="label-nomor-kartu">Nomor Kartu</span></div>
-                    <div style="float: right;"><?php echo form_input('nomor_kartu','','style="padding:5px;text-align:right;font-size:20px" class="" disabled=disabled value=0 class="text ui-widget-content ui-corner-all" id="nomor_kartu" '); ?></div>
-                </td>
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;">Diskon (%)</div>
-                    <div style="float: right;"><input type="input" class="qty100 angka" id="bayar_diskon" name="bayar_diskon" style="padding:5px;text-align:right;font-size:20px;width:50px;"/><input type="input" class="angka" id="bayar_diskon_display" style="padding:5px;text-align:right;font-size:20px;width:140px;" disabled="disabled"/></div>
-                </td>            
-            </tr> 
-            <tr style="line-height:25px;">
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;">Jumlah</div>
-                    <div style="float: right;"><?php echo form_input('jmh_dk','','style="padding:5px;text-align:right;font-size:20px" class="angka" disabled=disabled value=0 class="text ui-widget-content ui-corner-all" id="jmh_dk" '); ?></div>
-                </td>
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;"><strong>Total Belanja</strong></div>
-                    <div style="float: right;"><input type="text" class="angka" id="bayar_total" name="bayar_total" style="padding:5px;text-align:right;font-size:20px;" disabled="disabled"/></div>
-                </td>            
-            </tr>
-            <tr style="line-height:25px;">
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;"><span id="label-biaya-kartu">Biaya Kartu</span></div>
-                    <div style="float: right;"><?php echo form_input('biaya_kartu','','style="padding:5px;text-align:right;font-size:20px" class="angka" disabled=disabled value=0 class="text ui-widget-content ui-corner-all" id="biaya_kartu" '); ?></div>
-                </td>
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;">Tunai</div>
-                    <div style="float: right;"><input type="input" class="angka" id="bayar_bayar" name="bayar_bayar" style="padding:5px;text-align:right;font-size:20px"/></div>
-                </td>            
-            </tr>
-            <tr style="line-height:25px;">
-                <td style="width: 50%;">
-                    
-                    <div style="float:left;padding:5px;">Total D/K</div>
-                    <div style="float: right;"><?php echo form_input('total_dk','','style="padding:5px;text-align:right;font-size:20px" class="angka" disabled=disabled value=0 class="text ui-widget-content ui-corner-all" id="total_dk" '); ?></div>
-                </td>
-                <td style="width: 50%;">
-                    <div style="float:left;padding:5px;">Kembali</div>
-                    <div style="float: right;"><input type="input" class="angka" id="bayar_kembali" name="bayar_kembali" style="padding:5px;text-align:right;font-size:20px"/></div>
-                </td>            
-            </tr>
-        </table>
-    </div>
 </form>
 <script type="text/javascript">
-/**
- * $(document).ready(function() {
- *     $('#pelanggan').dialog({
- *         autoOpen : true,
- *         resizable : false,
- *         modal : true,
- *         height : 300,
- *         width : 300
- *     });
- * });
- */
 var base_url = '<?php echo base_url() ?>';
 <?php
     echo ($cd=='1') ? 'tampil_cd(" "," ");' : '';
 ?>
-$('#bayar_kembali').attr('disabled','disabled');
-$(document).jkey('f12,f10',function(key){
-    var total = $('#total').val();
-    if(total!='' && total!='0')
-    {
-        if(key=='f12')
-        {
-            frmbayar();
-            $('#bayar_bayar').focus();
-        } 
-        else if(key=='f10')
-        {
-            printScreen();
-        }
-    }
-    else
-    {
-        alert("Barang masih kosong!");
-    }
-});
 $('#total').val('0');
-$('#barang_kd').focus();
-window.onload = function() {
-  var input = document.getElementById("barang_kd").focus();
-}
-$('#ButtonBayar').live('click',function(){
-    var total = $('#total').val();
+$('#ButtonSimpan').live('click',function(){
     if(total!='' && total!='0')
     {
-        frmbayar();
-        $('#bayar_bayar').focus();
+         $("#proses").dialog("open");
+        SimpanKasirBaru();
     }
     else
     {
         alert("Barang masih kosong!");
-    }
-})
-//$('#barang_kd').attr('readonly','readonly');
-$('#barang_harga').attr('disabled','disabled');
-$('#imei').jkey('return,down,tab',function(key){
-    if(key=='return' || key=='tab')
-    {
-        if($(this).val()!='')
-        {
-            lihat_imei($(this).val());
-        }
-    } 
-    else
-    {
-        $('#barang_kd').focus();
     }
 });
 
@@ -257,20 +140,47 @@ $('#barang_kd').jkey('f2,return,down,tab,up,z',function(key){
     } 
     else if(key=='f2')
     {
-        var tujuan = base_url+"index.php/barang/list_barang_temp";
-        window.open(tujuan,"barang","scrollbars=yes,width=660,height=400");
+        var tujuan = base_url+"index.php/barang/list_barang_doang_temp";
+        window.open(tujuan,"barang","scrollbars=yes,width=700,height=400");
     }
     else if(key=='up')
     {
-        $('#barang_kd').focus();
+        $('#imei').focus();
     }
     else if(key=='z')
     {
         $(this).val('');
         $('#barang_nm').val('');
+        $('#barang_satuan').val('');
         $('#barang_stok').val('');
-        $('#barang_harga').val('');
+        $('#barang_harga_beli').val('');
         $(this).focus();
+    }
+});
+$('#faktur_no').jkey('return,down,tab,up',function(key){
+    if(key=='return' || key=='down' || key=='tab')
+    {
+        if($(this).val()!='' && $(this).val()!='0')
+        {
+            $('#tanggal').focus();
+        }
+    } 
+    else
+    {
+        $('#faktur_no').focus();
+    }
+});
+$('#tanggal').jkey('return,down,tab,up',function(key){
+    if(key=='return' || key=='down' || key=='tab')
+    {
+        if($(this).val()!='' && $(this).val()!='0')
+        {
+            $('#ket').focus();
+        }
+    } 
+    else
+    {
+        $('#faktur_no').focus();
     }
 });
 $('#barang_kd').live('focus',function(){
@@ -287,19 +197,22 @@ $('#barang_kd').live('focus',function(){
 $('#qty').jkey('return,down,tab,up',function(key){
     if(key=='return' || key=='down' || key=='tab')
     {
-        var stok = $('#barang_stok').val();
-        var qty = $(this).val();
-        if(parseFloat(stok)<parseFloat(qty))
+        if($(this).val()!='' && $(this).val()!='0')
         {
-            alert("Stok tidak mencukupi!");
-            $(this).val(stok);
+            $('#barang_harga_beli').focus();
         }
-        else
+    } 
+    else
+    {
+        $('#barang_kd').focus();
+    }
+});
+$('#barang_harga_beli').jkey('return,down,tab,up',function(key){
+    if(key=='return' || key=='down' || key=='tab')
+    {
+        if($(this).val()!='' && $(this).val()!='0')
         {
-            if($(this).val()!='' && $(this).val()!='0')
-            {
-                $('#diskon').focus();
-            }
+            $('#diskon').focus();
         }
     } 
     else
@@ -312,11 +225,12 @@ $('#diskon').jkey('return,down,tab,up',function(key){
     {
         var kd = $('#barang_kd').val();
         var nm = $('#barang_nm').val();
+        var sa = $('#barang_satuan').val();
         var st = $('#barang_stok').val();
-        var hg = convert_to_string($('#barang_harga').val());
+        var hg = convert_to_string($('#barang_harga_beli').val());
         var qt = $('#qty').val();
         var ds = $('#diskon').val();
-        addRow(kd,nm,hg,st,ds,qt);
+        addRow(kd,nm,sa,hg,st,ds,qt);
     } 
     else
     {
@@ -362,7 +276,7 @@ $('#bayar_bayar').jkey('return,f12,f10',function(){
      var kembali = convert_to_string($('#bayar_kembali').val());
      if(parseFloat(kembali) >= 0)
      {
-         $("#proses").dialog("open");
+        //  $("#proses").dialog("open");
         SimpanKasirBaru();
      }
      else
@@ -410,10 +324,10 @@ $('#jmh_dk').on('keyup',function(){
     hitung_biaya_kartu();
     hitung_kembalian(); 
 });
-$('img[id^=hapus]').live('click',function(){
+$('img[id^=hapus]').live('click',function(){ console.log("test");
     $(this).parents("tr").remove();
     hitung_total();
-    $('#barang_kd').focus();
+    $('#imei').focus();
 });
 $('#cbxpelanggan').live('click',function(){
     if($(this).is(':checked'))
@@ -565,16 +479,12 @@ function lihat_barang(kd)
                nm = pisahin[2];
             }
             var stok = pisahin[3];
-            var harga = pisahin[4];
+            var satuan = pisahin[8];
             var diskon = 0;
-            //var imei = new Array()
-            //imei[0] = $('#imei').val();
             var imei = $('#imei').val();
             $('#barang_kd').val(kd);
             $('#barang_nm').val(nm);
-            $('#barang_stok').val(stok);
-            $('#barang_harga').val(convert_to_string(harga));
-            //alert(imei.length);return;
+            $('#barang_satuan').val(satuan);
             if(imei == '')
             {
                 if(pisahin[5]=='10'||pisahin[5]=='60'||pisahin[5]=='70')
@@ -596,47 +506,33 @@ function lihat_barang(kd)
       }
     });
 }
-function addRow(kd,nm,harga,stok,diskon,qty,imei) 
-{    
+function addRow(kd,nm,satuan,harga,stok,diskon,qty,imei) 
+{   
     if(ngecekbarang(kd,imei)=='')
     {
         var hasil = false;
         if(qty > 0 && harga > 0)
         {
-            if(parseInt(qty) <= parseInt(stok))
-            {
-                if(nm.substr(0,2)=="HP" && imei=='')
-                {
-                    alert("Grup HP, imei tidak boleh kosong!");
-                }
-                else
-                {
-                	var tbl = $('#myTable');
-                	var lastRow = tbl.find("tr").length;
-                    var tblno = '<td class="atas">'+lastRow+'</td>';
-                	var tblkd = '<td class="atas"><input id="kd'+lastRow+'" value="'+kd+'" disabled="disabled"/></td>';
-                	var tblnm = '<td class="atas"><textarea class="barangnm" disabled="disabled" id="nm'+lastRow+'">'+nm+'</textarea></td>';
-                	var tblqt = '<td class="atas"><input id="qty'+lastRow+'" class="kanan" value="'+qty+'" disabled="disabled"/></td>';
-                	var tblhg = '<td class="atas"><input id="hrg'+lastRow+'" class="kanan" value="'+convert_to_numeric(harga)+'" disabled="disabled"/></td>';
-                    if(diskon=='') diskon = 0; 
-                    var jmhdiskon = (diskon==0) ? 0 : (parseFloat(diskon)/100)*parseFloat(convert_to_string(harga));
-                	var tblds = '<td class="atas"><input id="dsk'+lastRow+'" class="kanan" value="'+convert_to_numeric(jmhdiskon)+'" disabled="disabled"/></td>';
-                    var jumlah = (parseFloat(qty)*parseFloat(harga))-parseFloat(jmhdiskon);
-                    var tbljm = '<td class="atas"><input id="jmh'+lastRow+'" class="kanan" value="'+convert_to_numeric(jumlah)+'" disabled="disabled"/></td>';
-                    var gambarhapus = '<td class="tengah"><img id="hapus'+lastRow+'" class="delete'+lastRow+'" src="'+base_url+'inovapos_asset/img/bin.gif" style="margin:0;padding:0;cursor:pointer" /></td>';
-                	tbl.children().append("<tr>"+tblno+tblkd+tblnm+tblqt+tblhg+tblds+tbljm+gambarhapus+"</tr>");
-                    <?php
-                    echo ($cd=='1') ? 'tampil_cd(nm,jumlah);' : '';
-                    ?>
-                    hitung_total();
-                    kosongin();
-                    hasil = true;
-                }
-            }
-            else
-            {
-                alert("Stok tidak mencukupi!");
-            }
+            var tbl = $('#myTable');
+            var lastRow = tbl.find("tr").length;
+            var tblno = '<td class="atas">'+lastRow+'</td>';
+            var tblkd = '<td class="atas"><input id="kd'+lastRow+'" value="'+kd+'" disabled="disabled"/></td>';
+            var tblnm = '<td class="atas"><input class="barangnm" id="nm'+lastRow+'" value="'+nm+'" disabled="disabled"/></td>';
+            var tblqt = '<td class="atas"><input id="qty'+lastRow+'" class="kanan" value="'+qty+'" disabled="disabled"/></td>';
+            var tblhg = '<td class="atas"><input id="hrg'+lastRow+'" class="kanan" value="'+convert_to_numeric(harga)+'" disabled="disabled"/></td>';
+            if(diskon=='') diskon = 0; 
+            var jmhdiskon = (diskon==0) ? 0 : (parseFloat(diskon)/100)*parseFloat(convert_to_string(harga));
+            var tblds = '<td class="atas"><input id="dsk'+lastRow+'" class="kanan" value="'+convert_to_numeric(jmhdiskon)+'" disabled="disabled"/></td>';
+            var jumlah = (parseFloat(qty)*parseFloat(harga))-parseFloat(jmhdiskon);
+            var tbljm = '<td class="atas"><input id="jmh'+lastRow+'" class="kanan" value="'+convert_to_numeric(jumlah)+'" disabled="disabled"/></td>';
+            var gambarhapus = '<td class="tengah"><a href="javascript:hapusBaris('+lastRow+')"><img id="hapus'+lastRow+'" class="delete'+lastRow+'" src="'+base_url+'inovapos_asset/img/bin.gif" style="margin:0;padding:0;cursor:pointer" /></a></td>';
+            tbl.children().append("<tr>"+tblno+tblkd+tblnm+tblqt+tblhg+tblds+tbljm+gambarhapus+"</tr>");
+            <?php
+            echo ($cd=='1') ? 'tampil_cd(nm,jumlah);' : '';
+            ?>
+            hitung_total();
+            kosongin();
+            hasil = true;
         }
         else
         {
@@ -648,7 +544,7 @@ function addRow(kd,nm,harga,stok,diskon,qty,imei)
     {
         alert("Barang sudah masuk!");
         kosongin();
-        $('#barang_kd').focus();
+        $('#imei').focus();
     }
 }
 function ngecekbarang(lkd,limei)
@@ -675,24 +571,6 @@ function ngecekbarang(lkd,limei)
                 status = 'Barang sudah masuk!';
             }
         }
-//        for (i=1; i<lastRow; i++)
-//        {
-//            var kd = $('#kd'+i).val();
-//            if(lkd==kd)
-//            {
-//                status = 'Barang sudah masuk!';
-//            }
-//            /* --- >>> ini validasi memakai IMEI, bukan Kode Barang <<< --- */
-//            var imei = $('#nm'+i).val()
-//            for(j=0;j<limei.length;j++)
-//            {
-//                //alert(imei.search(limei[j]));
-//                if(imei.search(limei[j])!=-1)
-//                {
-//                    status = 'IMEI sudah masuk!';
-//                } 
-//            }    
-//        }
     }
     return status;
 }
@@ -724,8 +602,9 @@ function kosongin()
     $('#imei').val("");
     $('#barang_kd').val("");
     $('#barang_nm').val("");
+    $('#barang_satuan').val("");
     $('#barang_stok').val("");
-    $('#barang_harga').val("");
+    $('#barang_harga_beli').val("");
     
     $('#qty').val("");
     $('#diskon').val("");
@@ -745,7 +624,7 @@ function hapusBaris(no)
 {
     $('.delete'+no).parents("tr").remove();
     hitung_total();
-    $('#barang_kd').focus();
+    // $('#imei').focus();
 }
 function printScreen()
 {
@@ -789,56 +668,20 @@ function SimpanKasirBaru()
                     ];
                 }).get(); 
 
-    var jmhDebet = 0;
-    var sDK = $('input[name=term]:checked').val();
-    var iLeasing = 0;
-                 
-    if (sDK.toUpperCase()=='LEASING') iLeasing = 1; 
-    jmhKredit = 0;
-    
-    if(sDK.toUpperCase() == 'KREDIT')
-    {
-        jmhKredit =  adn_cnum($('#jmh_dk').val());
-    }
-    else if (sDK.toUpperCase() == 'DEBIT' || sDK.toUpperCase() == 'LEASING')
-    {
-        jmhDebet = adn_cnum($('#jmh_dk').val());
-    }
-
-    var totalBelanja = convert_to_string($('#bayar_total').val());
-    var biayaKartu = ($('#biaya_kartu').val()=='') ? 0 : convert_to_string($('#biaya_kartu').val());
-    var jmhTunai = parseFloat(totalBelanja) + parseFloat(biayaKartu) - parseFloat(jmhKredit) - parseFloat(jmhDebet); 
-    var hasil = totalBelanja + '-' + biayaKartu + '-' + jmhDebet + '-' + jmhKredit;
-    var jmh_bayar = $('#bayar_bayar').val();
-    var kembali = convert_to_string($('#bayar_kembali').val());
-
-
     var data = {
-        kd_term         : 'KASIR',
-        jmh_belanja     : convert_to_string($('#jmh_belanja').val()),
-        diskon_p        : convert_to_string($('#bayar_diskon').val()),
-        diskon_nominal  : convert_to_string($('#bayar_diskon_display').val()),
-        total_belanja   : totalBelanja,
+        kd_term   : 'KASIR',
+        no_faktur : $('#faktur_no').val(),
+        tgl       : $('#tanggal').val(),
+        ket       : $('#ket').val(),
+        total     : $('#total').val(),
         biaya_kirim     : 0,
-        lunas           : 0,
-        kd_pelanggan    : ($('#idpelanggan').val()!=''&&$('#idpelanggan').val()!='0')?$('#idpelanggan').val():0,
-        nomor_kartu     : $('#nomor_kartu').val(),
-        dk              : sDK,
-        jmh_tunai       : jmhTunai,
-        jmh_debet       : jmhDebet,
-        jmh_kredit      : jmhKredit,
-        biaya_kartu     : biayaKartu,
-        jmh_uang        : jmh_bayar,
-        jmh_kembali     : kembali,
-        leasing         : iLeasing,
         
         rows            : AoA
     };
     console.log(data);
-    var json = JSON.stringify(data);         
-            
-    $.post(
-        base_url+'index.php/kasir/simpan_temp_pelanggan',
+    var json = JSON.stringify(data);
+    $.post( 
+        base_url+'index.php/pembelian/simpan_temp_pelanggan',
         {data:json},
         function(res)
         {
@@ -851,24 +694,17 @@ function SimpanKasirBaru()
             }
             else
             {
-                print_faktur(statusfaktur[1]);
+                window.location=window.location;
             }
         }
     )
     .error(function(){ 
-        alert("Ada Error di Transaction.\nHubungi Admin/Bagian IT!.");
+        alert("Nomor faktur sudah ada");
         window.location = window.location; 
+        $('#faktur_no').focus();
     });
     
     return false; 
-}
-function print_faktur(faktur)
-{
-    $.post(base_url + 'index.php/kasir/cetak_dari_faktur/'+faktur+'/kasir',function(data)
-    { console.log(base_url + 'index.php/kasir/cetak_dari_faktur/'+faktur+'/kasir');
-        window.location=window.location;
-    })
-    .error(function(){alert("Error Printer!");});
 }
 function frmbayar()
 {    

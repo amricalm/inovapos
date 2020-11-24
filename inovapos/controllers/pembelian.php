@@ -1,5 +1,5 @@
 <?php
-class Kasir extends CI_Controller
+class Pembelian extends CI_Controller
 {
     function __construct()
     {
@@ -11,7 +11,7 @@ class Kasir extends CI_Controller
         $this->load->model('kasir_elektrik_model');
         $this->load->model('pelanggan_model');
         $this->load->model('karyawan_model');
-        $this->load->model('kasir_model');
+        $this->load->model('pembelian_model');
         $this->load->model('outlet_model');
         $this->load->model('user_model');
         $this->load->model('promosi_model');
@@ -35,7 +35,7 @@ class Kasir extends CI_Controller
         $data['halaman']                = 'kasir/index';
         $this->load->view('layout/index',$data);
     }
-    function kasir_temp()
+    function pembelian_temp()
     {     
         if($this->session->userdata('user_nm')=='' || $this->session->userdata('user_group')=='SPV')
         {
@@ -43,7 +43,7 @@ class Kasir extends CI_Controller
         }
         $data                           = $this->app_model->general();
         $data['option_tampilan']        = 'tanpa_menu';
-        $data['halaman']                = 'kasir/index_temp_pelanggan';
+        $data['halaman']                = 'pembelian/index_temp_pelanggan';
         $this->load->view('layout/index',$data);
     }
     function simpan()
@@ -59,8 +59,8 @@ class Kasir extends CI_Controller
         $etgl                   = explode('-',$this->session->userdata('tanggal'));
         $tgls                   = substr($etgl[0],2,2).$etgl[1];
         $tglsekarang            = substr($etgl[0],2,2).$etgl[1].$etgl[2];
-        $kd_akhir               = $this->kasir_model->get_kdakhir($tglsekarang);
-        $kd_akhir_history       = $this->kasir_model->get_kdakhirhistory($tglsekarang);
+        $kd_akhir               = $this->pembelian_model->get_kdakhir($tglsekarang);
+        $kd_akhir_history       = $this->pembelian_model->get_kdakhirhistory($tglsekarang);
         $fakturkdakhir          = ''; 
         if($kd_akhir > $kd_akhir_history)
         {
@@ -124,7 +124,7 @@ class Kasir extends CI_Controller
         
         //-- end pilih array barang       
         $this->db->trans_begin(); //TRANSAKSI DIMULAI
-        if($this->kasir_model->simpan($data)) //Simpan Header Transaksi
+        if($this->pembelian_model->simpan($data)) //Simpan Header Transaksi
         {
             $seq                    = 0;
             $i                      = 0;
@@ -173,7 +173,7 @@ class Kasir extends CI_Controller
                         $data['detail'][$i]['jmh']          = $datadtl['jmh'];
                         $data['detail'][$i]['imei']         = array();
                         
-                        if($this->kasir_model->simpan_dtl($datadtl))
+                        if($this->pembelian_model->simpan_dtl($datadtl))
                         {
                             for($x=0;$x<count($koleksiIMEI);$x++)
                             {
@@ -182,7 +182,7 @@ class Kasir extends CI_Controller
                                 $dataimei['imei']           = $koleksiIMEI[$x];
                                 $dataimei['urutan']         = $datadtl['urutan'];
                                 
-                                $this->kasir_model->simpan_dtl_imei($dataimei);
+                                $this->pembelian_model->simpan_dtl_imei($dataimei);
                                 
                                 $cekimei                    = $this->barang_imei_model->get($datadtl['kd_barang'],$koleksiIMEI[$x],'');
                                 if($cekimei->num_rows() > 0)
@@ -273,8 +273,8 @@ class Kasir extends CI_Controller
         $etgl                   = explode('-',$this->session->userdata('tanggal'));
         $tgls                   = substr($etgl[0],2,2).$etgl[1];
         $tglsekarang            = substr($etgl[0],2,2).$etgl[1].$etgl[2];
-        $kd_akhir               = $this->kasir_model->get_kdakhir($tglsekarang);
-        $kd_akhir_history       = $this->kasir_model->get_kdakhirhistory($tglsekarang);
+        $kd_akhir               = $this->pembelian_model->get_kdakhir($tglsekarang);
+        $kd_akhir_history       = $this->pembelian_model->get_kdakhirhistory($tglsekarang);
         $fakturkdakhir          = ''; 
         if($kd_akhir > $kd_akhir_history)
         {
@@ -324,7 +324,7 @@ class Kasir extends CI_Controller
         }
          
         $this->db->trans_begin(); //TRANSAKSI DIMULAI
-        if($this->kasir_model->simpan($data)) //Simpan Header Transaksi
+        if($this->pembelian_model->simpan($data)) //Simpan Header Transaksi
         { 
             $seq                    = 0;
             if(count($datadetail)>0)
@@ -362,7 +362,7 @@ class Kasir extends CI_Controller
                     $data['detail'][$i]['jmh']          = $datadtl['jmh'];
                     $data['detail'][$i]['imei']         = array();
                     
-                    if($this->kasir_model->simpan_dtl($datadtl))
+                    if($this->pembelian_model->simpan_dtl($datadtl))
                     {
                         $n              = strpos($nmBarang,"#");
                         $koleksiIMEI    = array();
@@ -376,7 +376,7 @@ class Kasir extends CI_Controller
                                 $dataimei['imei']           = str_replace("\n",'',$koleksiIMEI[$j]);
                                 $dataimei['urutan']         = $datadtl['urutan'];
                                 
-                                $this->kasir_model->simpan_dtl_imei($dataimei);
+                                $this->pembelian_model->simpan_dtl_imei($dataimei);
                                 
                                 $noimei                     = str_replace("\n",'',$koleksiIMEI[$j]);
                                 $cekimei                    = $this->barang_imei_model->get($datadtl['kd_barang'],$noimei,'');
@@ -439,64 +439,17 @@ class Kasir extends CI_Controller
             die('E#Data Kosong!');
         }
         $error                  = '';     
-        $etgl                   = explode('-',$this->session->userdata('tanggal'));
-        $tgls                   = substr($etgl[0],2,2).$etgl[1];
-        $tglsekarang            = substr($etgl[0],2,2).$etgl[1].$etgl[2];
-        $kd_akhir               = $this->kasir_model->get_kdakhir($tglsekarang);
-        $kd_akhir_history       = $this->kasir_model->get_kdakhirhistory($tglsekarang);
-        $fakturkdakhir          = ''; 
-        if($kd_akhir > $kd_akhir_history)
-        {
-            $fakturkdakhir      = $kd_akhir;
-        }
-        else
-        {
-            $fakturkdakhir      = $kd_akhir_history;
-        }
-        $data['kd_outlet']      = $this->session->userdata('outlet_kd');
-        $data['kd_gudang']      = $this->session->userdata('outlet_kd');
-        $data['no_faktur']      = 'OSI'.$tglsekarang.$fakturkdakhir; 
-        $data['tgl']            = $this->session->userdata('tanggal').' '.date('H:i:s');
-        $data['shift']          = $this->session->userdata('shift');
-        $data['kd_pelanggan']   = $res['kd_pelanggan'];
-        $data['ket']            = "";
-        $data['nik']            = $this->session->userdata('user_kd');
+        
+        $data['no_faktur']      = $res['no_faktur'];
+        $data['tgl']            = $res['tgl'].' '.date('H:i:s');
+        $data['ket']            = $res['ket'];
         $data['kd_term']        = 0;
-        $data['nomor_dk']       = $res['nomor_kartu'];
-        $data['jmh']            = str_replace('.','',$res['jmh_belanja']);
-        $data['diskon_p']       = str_replace('.','',$res['diskon_p']);
-        $data['diskon_nominal'] = str_replace('.','',$res['diskon_nominal']);
-        $data['pajak']          = 0;
-        $data['biaya_kirim']    = str_replace('.','',$res['biaya_kirim']);
-        $data['total']          = str_replace('.','',$res['total_belanja']);
-        $data['tunai']          = str_replace('.','',$res['jmh_uang']);
-        $data['kembali']        = str_replace('.','',$res['jmh_kembali']);
-        $data['lunas']          = 0;
+        $data['total']          = str_replace('.','',$res['total']);
         
-        $data['jmh_debet']      = str_replace('.','',$res['jmh_debet']);
-        $data['jmh_kredit']     = str_replace('.','',$res['jmh_kredit']);
-        $data['jmh_tunai']      = str_replace('.','',$res['jmh_uang']);
-        $data['jmh_biaya_kartu'] = str_replace('.','',$res['biaya_kartu']);
-        $data['leasing']        = $res['leasing'];
-        
-        $dk                     = $res['dk'];
         $datadetail             = $res['rows'];
         
-        //Validasi Ulang!
-        if($dk=='Kredit')
-        {
-            $data['jmh_debet']  = 0;
-            $data['jmh_kredit'] = $data['jmh_kredit'];
-        }
-
-        if($dk=='Debit')
-        {
-            $data['jmh_debet']  = $data['jmh_debet'];
-            $data['jmh_kredit'] = 0;
-        }
-         
         $this->db->trans_begin(); //TRANSAKSI DIMULAI
-        if($this->kasir_model->simpan($data)) //Simpan Header Transaksi
+        if($this->pembelian_model->simpan($data)) //Simpan Header Transaksi
         { 
             $seq                    = 0;
             if(count($datadetail)>0)
@@ -506,7 +459,7 @@ class Kasir extends CI_Controller
                     $kdBarang       = $datadetail[$i][0];
                     $nmBarang       = $datadetail[$i][1];
                     $qty            = $datadetail[$i][2]; 
-                    $harga          = /*str_replace('.','',$data['rows'][$i][3]);*/$this->barang_model->get($datadetail[$i][0],'','','')->row()->barang_harga_jual;
+                    $harga          = str_replace('.','',$datadetail[$i][3]);
                     $diskonPersen   = ((float)str_replace('.','',$datadetail[$i][4])/$harga)*100;
                     $diskon         = $datadetail[$i][4];
                     $jmh            = ($qty * $harga) - $diskon;
@@ -518,7 +471,6 @@ class Kasir extends CI_Controller
                     $datadtl['satuan']      = "";
                     $datadtl['harga']       = $harga;
                     $datadtl['diskon_p']    = $diskonPersen;
-                    $datadtl['pajak_p']     = 0;
                     $datadtl['jmh']         = $jmh;
                     /*
                      * Data untuk di print
@@ -529,52 +481,12 @@ class Kasir extends CI_Controller
                     $data['detail'][$i]['qty']          = $datadtl['qty'];
                     $data['detail'][$i]['satuan']       = $datadtl['satuan'];
                     $data['detail'][$i]['harga']        = $datadtl['harga'];
-                    $data['detail'][$i]['diskon_p']     = $datadtl['diskon_p'];
-                    $data['detail'][$i]['pajak_p']      = $datadtl['pajak_p'];
+                    $data['detail'][$i]['diskon']       = $datadtl['diskon'];
                     $data['detail'][$i]['jmh']          = $datadtl['jmh'];
-                    $data['detail'][$i]['imei']         = array();
                     
-                    if($this->kasir_model->simpan_dtl($datadtl))
+                    if($this->pembelian_model->simpan_dtl($datadtl))
                     {
-                        $n              = strpos($nmBarang,"#");
-                        $koleksiIMEI    = array();
-                        if($n > 0)
-                        {
-                            $koleksiIMEI = explode('#',$nmBarang);
-                            for($j=1;$j<count($koleksiIMEI);$j++)
-                            {
-                                $dataimei['no_faktur']      = $datadtl['no_faktur'];
-                                $dataimei['kd_barang']      = $datadtl['kd_barang'];
-                                $dataimei['imei']           = str_replace("\n",'',$koleksiIMEI[$j]);
-                                $dataimei['urutan']         = $datadtl['urutan'];
-                                
-                                $this->kasir_model->simpan_dtl_imei($dataimei);
-                                
-                                $noimei                     = str_replace("\n",'',$koleksiIMEI[$j]);
-                                $cekimei                    = $this->barang_imei_model->get($datadtl['kd_barang'],$noimei,'');
-                                if($cekimei->num_rows() > 0)
-                                {
-                                    $imeibarang['imei_barang']  = $datadtl['kd_barang'];
-                                    $imeibarang['imei_no']      = $noimei;
-                                    $imeibarang['imei_ref']     = $data['no_faktur'];
-                                    $imeibarang['imei_status']  = 0;
-                                    $this->barang_imei_model->update($datadtl['kd_barang'],$noimei,$imeibarang);
-                                }
-                                else
-                                {
-                                    $imeibarang['imei_barang']  = $datadtl['kd_barang'];
-                                    $imeibarang['imei_no']      = $noimei;
-                                    $imeibarang['imei_ref']     = $datadtl['no_faktur'];
-                                    $imeibarang['imei_status']  = 0;
-                                    $this->barang_imei_model->simpan($imeibarang);
-                                }
-                                
-                                if($noimei!='')
-                                {
-                                    $data['detail'][$i]['imei'][$j] = $noimei;
-                                }
-                            }
-                        }
+                        strpos($nmBarang,"#");
                     }
                     else
                     {
@@ -672,17 +584,8 @@ class Kasir extends CI_Controller
     }
     function cetak_dari_faktur($faktur,$balik='')
     {
-        // me-load library escpos
-        $this->load->library('escpos');
- 
-        // membuat connector printer ke shared printer bernama "printer_a" (yang telah disetting sebelumnya)
-        $connector = new Escpos\PrintConnectors\WindowsPrintConnector("POS-58");
- 
-        // membuat objek $printer agar dapat di lakukan fungsinya
-        $printer = new Escpos\Printer($connector);
- 
         $general                = $this->app_model->general();
-        $datadb                 = $this->kasir_model->ambil($faktur);
+        $datadb                 = $this->pembelian_model->ambil($faktur);
         $data                   = array();
         $datareplace            = array(
                                     'jmh'           => 0,
@@ -692,7 +595,6 @@ class Kasir extends CI_Controller
                                     );
         $data['no_faktur']      = $faktur;   
         $data['tgl']            = $datadb->row()->tgl;
-        $data['tgl_server']     = date("Y-m-d H:i:s");
         $data['kd_pelanggan']   = $datadb->row()->kd_pelanggan;
         $data['ket']            = $datadb->row()->ket;
         $data['nik']            = $datadb->row()->nik;
@@ -715,7 +617,7 @@ class Kasir extends CI_Controller
         $data['jmh_biaya_kartu'] = $datadb->row()->jmh_biaya_kartu;
         $data['detail']         = array();
         
-        $datadbdtl              = $this->kasir_model->ambil_dtl($faktur);
+        $datadbdtl              = $this->pembelian_model->ambil_dtl($faktur);
         $datasysvar             = $this->sys_var_model->get('hidden_kd_barang');
         $datasysvars            = explode(';',$datasysvar);
         
@@ -750,7 +652,7 @@ class Kasir extends CI_Controller
                     $datareplace['jmh']                 += $data['detail'][$i]['qty'] * $data['detail'][$i]['harga'];
                     $datareplace['total']               = $datareplace['jmh'];
                     //$datadbdtlimei                      = $this->barang_imei_model->get($rowdbdtl->kd_barang,'','',$faktur);
-                    $datadbdtlimei                      = $this->kasir_model->ambil_dtl_imei($faktur,$rowdbdtl->kd_barang,$rowdbdtl->urutan);
+                    $datadbdtlimei                      = $this->pembelian_model->ambil_dtl_imei($faktur,$rowdbdtl->kd_barang,$rowdbdtl->urutan);
                     if($datadbdtlimei->num_rows() > 0)
                     {
                         $x                          = 0;
@@ -778,31 +680,31 @@ class Kasir extends CI_Controller
         $kasir          = $this->user_model->user_ambil($data['nik'])->row()->user_nm;
         //print_r($datareplace);  
         //print_r($data);die();
-        // $handle         = printer_open($dataglobal['nama_printer']);
-        // printer_set_option($handle, PRINTER_MODE, "RAW");
-        // printer_start_doc($handle, "PrintKasir");
-        // printer_start_page($handle);
-        $cetak          = $this->app_model->maksimal(32,$namagudang,'tengah');
+        $handle         = printer_open($dataglobal['nama_printer']);
+        printer_set_option($handle, PRINTER_MODE, "RAW");
+        printer_start_doc($handle, "PrintKasir");
+        printer_start_page($handle);
+        $cetak          = $this->app_model->maksimal(40,$namagudang,'tengah');
 //        $cetak          .= "<br/>";
         if($alamatgudang!='')
         {
-            $cetak      .= $this->app_model->maksimal(32,$alamatgudang,'tengah');
+            $cetak      .= $this->app_model->maksimal(40,$alamatgudang,'tengah');
 //            $cetak      .= "<br/>";
         }
-        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
 //        $cetak          .= "<br/>";
-        $cetak          .= $this->app_model->maksimal(32,'No.'.$data['no_faktur'],'kiri');
+        $cetak          .= $this->app_model->maksimal(40,'No.'.$data['no_faktur'],'kiri');
 //        $cetak          .= "<br/>";
-        // $cetak          .= $this->app_model->maksimal(20,'Shift.'.$data['shift'],'kiri');
+        $cetak          .= $this->app_model->maksimal(20,'Shift.'.$data['shift'],'kiri');
 //        $cetak          .= "<br/>";
-        // $cetak          .= $this->app_model->maksimal(20,"Kasir:".$kasir,'kanan');
+        $cetak          .= $this->app_model->maksimal(20,"Kasir:".$kasir,'kanan');
 //        $cetak          .= "<br/>";
-        $cetak          .= $this->app_model->garis_tigadua();
+        $cetak          .= $this->app_model->garis_empatpuluh();
 //        $cetak          .= "<br/>";
         for($i=0;$i<count($data['detail']);$i++)
         {
             $nmbarang   = $this->barang_model->get($data['detail'][$i]['kd_barang'],'','','')->row()->barang_nm;
-            $cetak      .= $this->app_model->maksimal(32,$nmbarang,'kiri');
+            $cetak      .= $this->app_model->maksimal(40,$nmbarang,'kiri');
 //            $cetak      .= "<br/>";
             $jmhimei    = 0;
             if(count($data['detail'][$i]['imei'])>0)
@@ -816,77 +718,63 @@ class Kasir extends CI_Controller
                     $jmhimei++;
                 }
             }
-            $cetak      .= $this->app_model->maksimal(8,$data['detail'][$i]['kd_barang'],'kiri');
-            $cetak      .= $this->app_model->maksimal(12,$data['detail'][$i]['qty'].'x'.number_format($data['detail'][$i]['harga'],0,',','.'),'kanan');
-            $cetak      .= $this->app_model->maksimal(12,number_format($data['detail'][$i]['jmh'],0,',','.'),'kanan');
+            $cetak      .= $this->app_model->maksimal(14,$data['detail'][$i]['kd_barang'],'kiri');
+            $cetak      .= $this->app_model->maksimal(13,$data['detail'][$i]['qty'].'x'.number_format($data['detail'][$i]['harga'],0,',','.'),'kanan');
+            $cetak      .= $this->app_model->maksimal(13,number_format($data['detail'][$i]['jmh'],0,',','.'),'kanan');
 //            $cetak      .= "<br/>";
         }
-        $cetak          .= $this->app_model->garis_tigadua();
+        $cetak          .= $this->app_model->garis_empatpuluh();
 //        $cetak          .= "<br/>";
         $cetak          .= $this->app_model->maksimal(10,'TOTAL:','kiri');
-        $cetak          .= $this->app_model->maksimal(22,number_format($data['total'],0,',','.'),'kanan');
+        $cetak          .= $this->app_model->maksimal(30,number_format($data['total'],0,',','.'),'kanan');
 //        $cetak          .= "<br/>";
-//         $cetak          .= $this->app_model->maksimal(11,'DEBIT CARD:','kiri');
-//         $cetak          .= $this->app_model->maksimal(29,number_format($data['jmh_debet'],0,',','.'),'kanan');
-// //        $cetak          .= "<br/>";
-//         $cetak          .= $this->app_model->maksimal(12,'CREDIT CARD:','kiri');
-//         $cetak          .= $this->app_model->maksimal(28,number_format($data['jmh_kredit'],0,',','.'),'kanan');
+        $cetak          .= $this->app_model->maksimal(11,'DEBIT CARD:','kiri');
+        $cetak          .= $this->app_model->maksimal(29,number_format($data['jmh_debet'],0,',','.'),'kanan');
+//        $cetak          .= "<br/>";
+        $cetak          .= $this->app_model->maksimal(12,'CREDIT CARD:','kiri');
+        $cetak          .= $this->app_model->maksimal(28,number_format($data['jmh_kredit'],0,',','.'),'kanan');
 //        $cetak          .= "<br/>";
         $cetak          .= $this->app_model->maksimal(10,'TUNAI:','kiri');
-        $cetak          .= $this->app_model->maksimal(22,number_format($data['jmh_tunai'],0,',','.'),'kanan');
+        $cetak          .= $this->app_model->maksimal(30,number_format($data['jmh_tunai'],0,',','.'),'kanan');
 //        $cetak          .= "<br/>";
         $cetak          .= $this->app_model->maksimal(15,'UANG KEMBALI:','kiri');
-        $cetak          .= $this->app_model->maksimal(17,number_format(($data['jmh_tunai']-$data['tunai']),0,',','.'),'kanan');
+        $cetak          .= $this->app_model->maksimal(25,number_format(($data['jmh_tunai']-$data['tunai']),0,',','.'),'kanan');
 //        $cetak          .= "<br/>";
         
         if($data['kd_pelanggan']!=''&&$data['kd_pelanggan']!='0')
         {
             $cetak      .= $this->app_model->maksimal(20,'DISKON PELANGGAN :','kiri');
-            $cetak      .= $this->app_model->maksimal(12,number_format($data['diskon_p'],0,',','.'),'kanan');
+            $cetak      .= $this->app_model->maksimal(20,number_format($data['diskon_p'],0,',','.'),'kanan');
 //            $cetak      .= "<br/>";
         }
-        $cetak          .= $this->app_model->garis_tigadua();
+        $cetak          .= $this->app_model->garis_empatpuluh();
 //        $cetak          .= "<br/>";
-        // $cetak          .= ($data['nomor_dk']!='') ? $this->app_model->maksimal(40,'Nomor Kartu Anda : '.$data['nomor_dk'],'tengah') : '';
+        $cetak          .= ($data['nomor_dk']!='') ? $this->app_model->maksimal(40,'Nomor Kartu Anda : '.$data['nomor_dk'],'tengah') : '';
 //        $cetak          .= "<br/>";
         $promosi        = $this->promosi_model->get()->row()->promosi_teks;
-        $epromosi       = wordwrap($promosi,32,'@');
+        $epromosi       = wordwrap($promosi,40,'@');
         $epromosi       = explode('@',$epromosi);
         for($j=0;$j<count($epromosi);$j++)
         {
-            $cetak      .= $this->app_model->maksimal(32,$epromosi[$j],'tengah');
+            $cetak      .= $this->app_model->maksimal(40,$epromosi[$j],'tengah');
 //            $cetak      .= "<br/>";
         }
-        $cetak          .= $this->app_model->maksimal(32,'Terima Kasih','tengah');
+        $cetak          .= $this->app_model->maksimal(40,'Terima Kasih','tengah');
 //        $cetak          .= "<br/>";
-        $cetak          .= $this->app_model->maksimal(32,$data['tgl_server'],'tengah');
+        $cetak          .= $this->app_model->maksimal(40,$data['tgl'],'tengah');
 //        $cetak          .= "<br/>";
-        // $cetak          .= $this->app_model->maksimal(40,'inovaPOS v.' . $general['versi'],'tengah');
+        $cetak          .= $this->app_model->maksimal(40,'inovaPOS v.' . $general['versi'],'tengah');
 //        $cetak          .= "<br/>";
-        $cetak          .= $this->app_model->maksimal(32,' ','tengah');
+        $cetak          .= $this->app_model->maksimal(40,' ','tengah');
 //        $cetak          .= "<br/>";
-        $cetak          .= $this->app_model->maksimal(32,' ','tengah');
+        $cetak          .= $this->app_model->maksimal(40,' ','tengah');
 //        $cetak          .= "<br/>";
 //        echo $cetak;
 //        die();
-
-        /* ---------------------------------------------------------
-         * Teks biasa | text()
-         */
-        $printer->initialize();
-        $printer->text($cetak);
-        $printer->text("\n");
- 
-        /* ---------------------------------------------------------
-         * Menyelesaikan printer
-         */
-        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
-        $printer->close();
-
-        // printer_write($handle,$cetak);
-        // printer_end_page($handle);
-        // printer_end_doc($handle);
-        // printer_close($handle);
+        printer_write($handle,$cetak);
+        printer_end_page($handle);
+        printer_end_doc($handle);
+        printer_close($handle);
         if($balik=='')
         {
             redirect('laporan/penjualan');
@@ -1026,8 +914,8 @@ class Kasir extends CI_Controller
         $etgl                   = explode('-',$this->session->userdata('tanggal'));
         $tgls                   = substr($etgl[0],2,2).$etgl[1];
         $tglsekarang            = substr($etgl[0],2,2).$etgl[1].$etgl[2];
-        $kd_akhir               = $this->kasir_model->get_kdakhir($tglsekarang);
-        $kd_akhir_history       = $this->kasir_model->get_kdakhirhistory($tglsekarang);
+        $kd_akhir               = $this->pembelian_model->get_kdakhir($tglsekarang);
+        $kd_akhir_history       = $this->pembelian_model->get_kdakhirhistory($tglsekarang);
         $fakturkdakhir          = ''; 
         if($kd_akhir > $kd_akhir_history)
         {
@@ -1062,7 +950,7 @@ class Kasir extends CI_Controller
         $data['jmh_biaya_kartu'] = str_replace('.','',$res['biaya_kartu']);
         
         $this->db->trans_begin(); //TRANSAKSI DIMULAI
-        if($this->kasir_model->simpan($data)) //Simpan Header Transaksi
+        if($this->pembelian_model->simpan($data)) //Simpan Header Transaksi
         { 
             $kdbarangelektrik               = $this->barang_elektrik_model->get();
             $barangelektrik                 = $this->barang_model->get($kdbarangelektrik['barang_kd'],'','','')->row_array();
@@ -1078,7 +966,7 @@ class Kasir extends CI_Controller
             $datadetail['diskon_p']         = 0;
             $datadetail['pajak_p']          = 0;
             $datadetail['jmh']              = ($datadetail['qty'] * $datadetail['harga']);
-            $this->kasir_model->simpan_dtl($datadetail);
+            $this->pembelian_model->simpan_dtl($datadetail);
             if(count($res['rows'])>0)
             {
                 for($i=1;$i<count($res['rows']);$i++)
@@ -1121,7 +1009,7 @@ class Kasir extends CI_Controller
     function cetak_elektrik_dari_faktur($faktur,$balik='')
     {
         $general                = $this->app_model->general();
-        $datadb                 = $this->kasir_model->ambil($faktur);
+        $datadb                 = $this->pembelian_model->ambil($faktur);
         $data                   = array();
         $datareplace            = array(
                                     'jmh'           => 0,

@@ -649,6 +649,7 @@ class Barang_saldo_model extends CI_Model
         if($kdbarang!='')
         {
             $CI->db->where('barang_kd',$kdbarang);
+            $CI->db->or_where('barang_barcode',$kdbarang);
         }
         $CI->db->join('im_mgroup_barang','group_kd=barang_group','left outer');
         $barang                         = $CI->db->get('im_mbarang');
@@ -685,6 +686,7 @@ class Barang_saldo_model extends CI_Model
                                             WHERE kd_gudang_tujuan = '$kodegudang'
                                             AND kd_barang = '$kodebarang'
                                             /*AND date(tgl) = '$tglsekarang'*/";
+                                            echo $this->db->last_query(); die();
                 $qtymutasimasuk             = ($this->db->query($mutasimasuk)->num_rows()>0) ? $this->db->query($mutasimasuk)->row()->qty : 0;
                 
                 $penyesuaian                = " SELECT IFNULL(SUM(qty),0) AS qty
@@ -733,6 +735,12 @@ class Barang_saldo_model extends CI_Model
                                             AND kd_barang = '$kodebarang'
                                             /*AND date(tgl) = '$tglsekarang'*/";
                 $qtymutasimasuk             = ($this->db->query($mutasimasuk)->num_rows()>0) ? $this->db->query($mutasimasuk)->row()->qty : 0;
+                $pembelian                  = " SELECT IFNULL(SUM(qty),0) AS qty 
+                                            FROM ac_tbeli_dtl dtl 
+                                            INNER JOIN ac_tbeli hdr 
+                                            ON dtl.no_faktur = hdr.no_faktur
+                                            AND kd_barang = '$kodebarang'";
+                $qtypembelian               = ($this->db->query($pembelian)->num_rows()>0) ? $this->db->query($pembelian)->row()->qty : 0;
                 $mutasikeluar               = " SELECT IFNULL(SUM(qty),0) AS qty
                                             FROM im_tpindah_barang_dtl dtl
                                             INNER JOIN im_tpindah_barang hdr
@@ -770,13 +778,14 @@ class Barang_saldo_model extends CI_Model
                                             
                 $qty_tukar_keluar           = ($this->db->query($sql_tukar_keluar)->num_rows()>0) ? $this->db->query($sql_tukar_keluar)->row()->qty:0;
                 
-                $qtysaldo                   = ((int)$qtysaldoawal+(int)$qtymutasimasuk+(int)$qtypenyesuaian) - ((int)$qtymutasikeluar+(int)$qtypenjualan) + (int) $qty_tukar_masuk - (int)$qty_tukar_keluar;
+                $qtysaldo                   = ((int)$qtysaldoawal+(int)$qtymutasimasuk+(int)$qtypenyesuaian+(int)$qtypembelian) - ((int)$qtymutasikeluar+(int)$qtypenjualan) + (int) $qty_tukar_masuk - (int)$qty_tukar_keluar;
                 
                 $data[$i]['saldo_qty']      = $qtysaldo;
                 $data[$i]['saldo_awal']     = $qtysaldoawal;
                 $data[$i]['mutasi_masuk']   = $qtymutasimasuk;
                 $data[$i]['mutasi_keluar']  = $qtymutasikeluar;
                 $data[$i]['penjualan']      = $qtypenjualan;
+                $data[$i]['pembelian']      = $qtypembelian;
                 $data[$i]['penyesuaian']    = $qtypenyesuaian;
                 $data[$i]['saldo_shift']    = $shiftsekarang;
                 $data[$i]['saldo_tgl']      = $tglsekarang;
