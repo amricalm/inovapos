@@ -669,7 +669,6 @@ class Tutup_shift extends CI_Controller
         // printer_end_doc($handle);
         // printer_close($handle);
         //redirect('tutup_shift/kosongkan_transaksi');
-        echo '<script type="text/javascript">window.location="'.base_url().'index.php/tutup_shift/sukses_tutup_shift";</script>';
         redirect('tutup_shift');
     }
 
