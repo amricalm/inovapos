@@ -64,12 +64,12 @@ class Login extends CI_Controller
 //                        if($laporan->num_rows() > 0)
 //                        {
                             $etglshift                      = /*explode('-',$laporan->row()->tgl)*/ explode('-',$tglshift->row()->tgl);
-                            $tglselanjutnya                 = ($shift->row()->shift=='2') ? date('Y-m-d',mktime(0,0,0,$etglshift[1],$etglshift[2]+1,$etglshift[0],0)) : $tglshift->row()->tgl;
+                            $tglselanjutnya                 = date('Y-m-d',mktime(0,0,0,$etglshift[1],$etglshift[2]+1,$etglshift[0]));
                             $datas['log_col']                = "SHIFT";
                             $datas['log_val']                = "OPEN";
                             $datas['tipe']                   = "SHIFT";
                             $datas['tgl']                    = $tglselanjutnya;
-                            $datas['shift']                  = ($shift->row()->shift=='2') ? '1' : '2';
+                            $datas['shift']                  = '1';
                             $datas['uid']                    = $array['user_kd'];
                             $this->log_proses_model->simpanLogJual($datas);
                             $tglshift                       = $this->log_proses_model->gettutupshift(); 

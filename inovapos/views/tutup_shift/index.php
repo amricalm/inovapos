@@ -197,7 +197,7 @@ function cek()
     else
     {
         var test = confirm("Anda Yakin akan melakukan Tutup Shift Tanggal <?php echo $this->session->userdata('tanggal') ?> dan Shift <?php echo $this->session->userdata('shift') ?>?")
-        var tanpapenjualan = ($('#tanpapenjualan').is(':checked')) ? $('#tanpapenjualan').val() : '';
+        var tanpapenjualan = ($('#tanpapenjualan').is(':checked')) ? $('#tanpapenjualan').val() : '0';
         var href = $('#tujuan').val();
         var href_baru = href+"/"+tanpapenjualan;
         $('#close_transaction').attr('href',href_baru);

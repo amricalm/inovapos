@@ -16,8 +16,8 @@
                 <td><?php 
                     echo '<span style="vertical-align:middle">';
                     echo ($this->session->userdata('shift')=='1') ? form_radio('shift','1',true).' 1 </span>' : form_radio('shift','1').' 1 </span>';
-                    echo '<span style="vertical-align:middle">';
-                    echo ($this->session->userdata('shift')=='2') ? form_radio('shift','2',true).' 2 </span>' : form_radio('shift','2').' 2 </span>' ?></td>
+                    // echo '<span style="vertical-align:middle">';
+                    // echo ($this->session->userdata('shift')=='2') ? form_radio('shift','2',true).' 2 </span>' : form_radio('shift','2').' 2 </span>' ?></td>
             </tr>
             <tr>
                 <td width="35%">Pilih Kelompok Barang</td>

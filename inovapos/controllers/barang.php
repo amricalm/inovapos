@@ -860,16 +860,16 @@ class Barang extends CI_Controller
         if($data['tutup_shift'])
         {
             $etglsekarang               = explode('-',$this->session->userdata('tanggal'));
-            if($this->session->userdata('shift')=='1')
-            {
-                $shiftselanjutnya       = '2';
-                $tglselanjutnya         = $this->session->userdata('tanggal');
-            }
-            else
-            {
+            // if($this->session->userdata('shift')=='1')
+            // {
+            //     $shiftselanjutnya       = '2';
+            //     $tglselanjutnya         = $this->session->userdata('tanggal');
+            // }
+            // else
+            // {
                 $shiftselanjutnya       = '1';
-                $tglselanjutnya         = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0],0));
-            }
+                $tglselanjutnya         = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0]));
+            // }
             $query                      = $this->barang_saldo_model->saldo('',$tglselanjutnya,$shiftselanjutnya);
         }
         else 
@@ -1119,10 +1119,16 @@ class Barang extends CI_Controller
         $tgl_saw        = $this->sys_var_model->get(PERIODE_SAW_BARANG);
         $data           = $this->barang_model->get('','','','','');
         //$data		    = $this->barang_saldo_model->get_saw($tgl_saw);
-        $handle         = printer_open($dataglobal['nama_printer']);
-        printer_set_option($handle, PRINTER_MODE, "RAW");
-        printer_start_doc($handle, "PrintKasir");
-        printer_start_page($handle);
+        // $handle         = printer_open($dataglobal['nama_printer']);
+        // printer_set_option($handle, PRINTER_MODE, "RAW");
+        // printer_start_doc($handle, "PrintKasir");
+        // printer_start_page($handle);
+
+        $this->load->library('escpos');// me-load library escpos
+        // membuat connector printer ke shared printer bernama "POS-58" (yang telah disetting sebelumnya)
+        $connector = new Escpos\PrintConnectors\WindowsPrintConnector($dataglobal['nama_printer']);
+        // membuat objek $printer agar dapat di lakukan fungsinya
+        $printer = new Escpos\Printer($connector);
 
         if ($judul!='')
         {
@@ -1132,13 +1138,13 @@ class Barang extends CI_Controller
         {
             $judul = 'Laporan Stock';
         }
-        $cetak          .= $this->app_model->maksimal(40,$judul,'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('outlet_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('user_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('tanggal').' '.date('H:i:s'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,'Shift : '.$this->session->userdata('shift'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$judul,'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('outlet_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('user_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('tanggal').' '.date('H:i:s'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,'Shift : '.$this->session->userdata('shift'),'tengah');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         //$cetak          .= '<br/>';
         foreach($data->result() as $rowbarang)
         {
@@ -1151,23 +1157,29 @@ class Barang extends CI_Controller
                 //$cetak          .= '<br/>';
             }
         }
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Dicetak: ' . date('Y-m-d H:i'), 'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Dicetak: ' . date('Y-m-d H:i'), 'kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
         //echo $cetak;
         //die();
         
-        printer_write($handle,$cetak);
-        printer_end_page($handle);
-        printer_end_doc($handle);
-        printer_close($handle);
+        $printer->initialize();
+        $printer->text($cetak);
+        $printer->text("\n");
+        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
+        $printer->close();
+
+        // printer_write($handle,$cetak);
+        // printer_end_page($handle);
+        // printer_end_doc($handle);
+        // printer_close($handle);
         redirect('barang');
     }
     
@@ -1180,10 +1192,16 @@ class Barang extends CI_Controller
         $tgl_saw        = $this->sys_var_model->get(PERIODE_SAW_BARANG);
         $data           = $this->barang_model->get('','','','','');
         //$data		    = $this->barang_saldo_model->get_saw($tgl_saw);
-        $handle         = printer_open($dataglobal['nama_printer']);
-        printer_set_option($handle, PRINTER_MODE, "RAW");
-        printer_start_doc($handle, "PrintKasir");
-        printer_start_page($handle);
+        // $handle         = printer_open($dataglobal['nama_printer']);
+        // printer_set_option($handle, PRINTER_MODE, "RAW");
+        // printer_start_doc($handle, "PrintKasir");
+        // printer_start_page($handle);
+
+        $this->load->library('escpos');// me-load library escpos
+        // membuat connector printer ke shared printer bernama "POS-58" (yang telah disetting sebelumnya)
+        $connector = new Escpos\PrintConnectors\WindowsPrintConnector($dataglobal['nama_printer']);
+        // membuat objek $printer agar dapat di lakukan fungsinya
+        $printer = new Escpos\Printer($connector);
 
         if ($judul!='')
         {
@@ -1193,29 +1211,29 @@ class Barang extends CI_Controller
         {
             $judul = 'Laporan Stock';
         }
-        $cetak          .= $this->app_model->maksimal(40,$judul,'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('outlet_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('user_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('tanggal').' '.date('H:i:s'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,'Shift : '.$this->session->userdata('shift'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$judul,'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('outlet_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('user_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('tanggal').' '.date('H:i:s'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,'Shift : '.$this->session->userdata('shift'),'tengah');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         //$cetak          .= '<br/>';
         foreach($data->result() as $rowbarang)
         {
             if($judul!='')
             {
                 $etglsekarang                   = explode('-',$this->session->userdata('tanggal'));
-                if($this->session->userdata('shift')=='1')
-                {
-                    $shiftselanjutnya           = '2';
-                    $tglselanjutnya             = $this->session->userdata('tanggal');
-                }
-                else
-                {
+                // if($this->session->userdata('shift')=='1')
+                // {
+                //     $shiftselanjutnya           = '2';
+                //     $tglselanjutnya             = $this->session->userdata('tanggal');
+                // }
+                // else
+                // {
                     $shiftselanjutnya           = '1';
-                    $tglselanjutnya             = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0],0));
-                }
+                    $tglselanjutnya             = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0]));
+                // }
                 $saldo          = $this->barang_saldo_model->saldo($rowbarang->barang_kd,$tglselanjutnya,$shiftselanjutnya);
             }
             else
@@ -1230,23 +1248,29 @@ class Barang extends CI_Controller
                 //$cetak          .= '<br/>';
             }
         }
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Dicetak: ' . date('Y-m-d H:i'), 'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Dicetak: ' . date('Y-m-d H:i'), 'kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
         //echo $cetak;
         //die();
         
-        printer_write($handle,$cetak);
-        printer_end_page($handle);
-        printer_end_doc($handle);
-        printer_close($handle);
+        $printer->initialize();
+        $printer->text($cetak);
+        $printer->text("\n");
+        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
+        $printer->close();
+
+        // printer_write($handle,$cetak);
+        // printer_end_page($handle);
+        // printer_end_doc($handle);
+        // printer_close($handle);
         if($judul=='')
         {
             redirect('barang');
@@ -1293,30 +1317,42 @@ class Barang extends CI_Controller
         $dataglobal     = $this->app_model->general();
         $cetak          = '';
         $data           = $this->barang_model->get($kdbarang,'','','','');
-        $handle         = printer_open($dataglobal['nama_printer']);
-        printer_set_option($handle, PRINTER_MODE, "RAW");
-        printer_start_doc($handle, "PrintKasir");
-        printer_start_page($handle);
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('outlet_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,'PERUBAHAN HARGA MANUAL','tengah');
+        // $handle         = printer_open($dataglobal['nama_printer']);
+        // printer_set_option($handle, PRINTER_MODE, "RAW");
+        // printer_start_doc($handle, "PrintKasir");
+        // printer_start_page($handle);
+
+        $this->load->library('escpos');// me-load library escpos
+        // membuat connector printer ke shared printer bernama "POS-58" (yang telah disetting sebelumnya)
+        $connector = new Escpos\PrintConnectors\WindowsPrintConnector($dataglobal['nama_printer']);
+        // membuat objek $printer agar dapat di lakukan fungsinya
+        $printer = new Escpos\Printer($connector);
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('outlet_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,'PERUBAHAN HARGA MANUAL','tengah');
         $cetak          .= $this->app_model->maksimal(20,'Tanggal Sesi : ','kiri');
         $cetak          .= $this->app_model->maksimal(20,$this->session->userdata('tanggal'),'kanan');
         $cetak          .= $this->app_model->maksimal(20,'Cetak : ','kiri');
         $cetak          .= $this->app_model->maksimal(20,date('Y-m-d H:i:s'),'kanan');        
         $cetak          .= $this->app_model->maksimal(20,'Shift : '.$this->session->userdata('shift'),'kiri');
         $cetak          .= $this->app_model->maksimal(20,'Oleh : '.$this->session->userdata('user_nm'),'kanan');
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         $cetak          .= $this->app_model->maksimal(12,$data->row()->barang_kd,'kiri');
         $cetak          .= $this->app_model->maksimal(18,$data->row()->barang_nm,'kiri');
         $cetak          .= $this->app_model->maksimal(10,$data->row()->barang_harga_jual,'kanan');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        //$cetak          .= $this->app_model->garis_empatpuluh();
-        printer_write($handle,$cetak);
-        printer_end_page($handle);
-        printer_end_doc($handle);
-        printer_close($handle);
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        //$cetak          .= $this->app_model->garis_tigadua();
+        $printer->initialize();
+        $printer->text($cetak);
+        $printer->text("\n");
+        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
+        $printer->close();
+
+        // printer_write($handle,$cetak);
+        // printer_end_page($handle);
+        // printer_end_doc($handle);
+        // printer_close($handle);
     }
 }
 

@@ -204,7 +204,7 @@ class Tutup_shift extends CI_Controller
     }
     
     function close_transaction($cekpenjualan)
-    { echo "test"; die();
+    {
         $this->db->trans_begin();
         $terus              = false;
         if($cekpenjualan=='')
@@ -243,24 +243,25 @@ class Tutup_shift extends CI_Controller
                  */
                 $error_saldo_awal_baru                  = '';
                 $saldo_hari_ini                         = $this->barang_saldo_model->saldo_hari_ini();
+                 
                 for($i=0;$i<count($saldo_hari_ini);$i++)
                 {
                     if($saldo_hari_ini[$i]['saldo_qty']!=0)
-                    {
+                    { 
                         $dataSaldoAwal['saldo_barang']  = $saldo_hari_ini[$i]['saldo_barang'];
                         $dataSaldoAwal['saldo_gudang']  = $saldo_hari_ini[$i]['saldo_gudang'];
                         $dataSaldoAwal['saldo_qty']     = $saldo_hari_ini[$i]['saldo_qty'];
-                        if($saldo_hari_ini[$i]['saldo_shift']=='1')
-                        {
-                            $dataSaldoAwal['saldo_tgl'] = $saldo_hari_ini[$i]['saldo_tgl'];
-                            $dataSaldoAwal['saldo_shift'] = '2'; 
-                        }
-                        else
-                        {
+                        // if($saldo_hari_ini[$i]['saldo_shift']=='1')
+                        // {
+                        //     $dataSaldoAwal['saldo_tgl'] = $saldo_hari_ini[$i]['saldo_tgl'];
+                        //     $dataSaldoAwal['saldo_shift'] = '2'; 
+                        // }
+                        // else
+                        // {
                             $etgl                       = explode('-',$saldo_hari_ini[$i]['saldo_tgl']);
-                            $dataSaldoAwal['saldo_tgl'] = date('Y-m-d',mktime(0,0,0,$etgl[1],$etgl[2]+1,$etgl[0],0));
+                            $dataSaldoAwal['saldo_tgl'] = date('Y-m-d',mktime(0,0,0,$etgl[1],$etgl[2]+1,$etgl[0]));
                             $dataSaldoAwal['saldo_shift'] = '1';
-                        }
+                        // }
                         
                         if(!$this->db->insert('im_msaldo_barang',$dataSaldoAwal))
                         {
@@ -557,8 +558,8 @@ class Tutup_shift extends CI_Controller
         $jmh_tunai      = $this->jual->jmh_tunai($this->session->userdata('tanggal'),$this->session->userdata('shift'));
         $jmh_debet      = $this->jual->jmh_debet($this->session->userdata('tanggal'),$this->session->userdata('shift'));
         $jmh_kredit     = $this->jual->jmh_kredit($this->session->userdata('tanggal'),$this->session->userdata('shift'));
-        $update_harga_terakhir = ($this->log->get('UPDATE HARGA','','kd_log')->num_rows()>0) ? $this->log->get('UPDATE HARGA','','kd_log')->row()->tgl : '';
-        $ositerakhir    = $this->jual->osi_terakhir($this->session->userdata('tanggal'),$this->session->userdata('shift'));
+        $update_harga_terakhir = ($this->log->get('UPDATE HARGA','','kd_log')->num_rows()>0) ? $this->log->get('UPDATE HARGA','','kd_log')->row()->tgl : '-';
+        $ositerakhir    = ($this->jual->osi_terakhir($this->session->userdata('tanggal'),$this->session->userdata('shift')) !='') ? $this->jual->osi_terakhir($this->session->userdata('tanggal'),$this->session->userdata('shift')) : '-';
         $faktur_akhir               = $this->barang_mutasi_model->get_max_faktur_dari_pusat()->row()->no_faktur;
         $faktur_akhir               = ($faktur_akhir=='') ? '0' : $faktur_akhir;
         $faktur_akhir_history       = $this->barang_mutasi_model->get_max_faktur_dari_pusat_history()->row()->no_faktur;
@@ -568,40 +569,46 @@ class Tutup_shift extends CI_Controller
         $itemupdateharga = $this->log->get_item_update_harga($this->session->userdata('tanggal'),$this->session->userdata('shift'))->num_rows();
         $tgltutupshift          = $this->log->get('SHIFT','SHIFT','tgl')->row()->tgl_edit;
 
-        $handle         = printer_open($dataglobal['nama_printer']);
-        printer_set_option($handle, PRINTER_MODE, "RAW");
-        printer_start_doc($handle, "CetakBuktiStor");
-        printer_start_page($handle);
+        // $handle         = printer_open($dataglobal['nama_printer']);
+        // printer_set_option($handle, PRINTER_MODE, "RAW");
+        // printer_start_doc($handle, "CetakBuktiStor");
+        // printer_start_page($handle);
+
+        $this->load->library('escpos');// me-load library escpos
+        // membuat connector printer ke shared printer bernama "POS-58" (yang telah disetting sebelumnya)
+        $connector = new Escpos\PrintConnectors\WindowsPrintConnector($dataglobal['nama_printer']);
+        // membuat objek $printer agar dapat di lakukan fungsinya
+        $printer = new Escpos\Printer($connector);
   
 
-        $cetak          = $this->app_model->maksimal(40,'Bukti Setoran','tengah');
+        $cetak          = $this->app_model->maksimal(32,'Bukti Setoran','tengah');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Toko: '.$namagudang,'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Toko: '.$namagudang,'kiri');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Tanggal: ' . $this->session->userdata('tanggal'),'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Tanggal: ' . $this->session->userdata('tanggal'),'kiri');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Shift: ' . $this->session->userdata('shift'),'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Shift: ' . $this->session->userdata('shift'),'kiri');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Tutup Shift: ' . $tgltutupshift,'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Tutup Shift: ' . $tgltutupshift,'kiri');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
 //        $cetak          .= '<br/>';
         $cetak          .= $this->app_model->maksimal(11,'Jumlah Bon:','kiri');
-        $cetak          .= $this->app_model->maksimal(29,number_format($jmh_bon,0,',','.'),'kanan');
+        $cetak          .= $this->app_model->maksimal(21,number_format($jmh_bon,0,',','.'),'kanan');
 //        $cetak          .= '<br/>';
         $cetak          .= $this->app_model->maksimal(17,'Jumlah Penjualan: ','kiri');
-        $cetak          .= $this->app_model->maksimal(23,number_format($jmh_penjualan,0,',','.'),'kanan');
+        $cetak          .= $this->app_model->maksimal(15,number_format($jmh_penjualan,0,',','.'),'kanan');
 //        $cetak          .= '<br/>';
         $cetak          .= $this->app_model->maksimal(12,'Jumlah Uang: ','kiri');
-        $cetak          .= $this->app_model->maksimal(28,number_format($jmh_tunai,0,',','.'),'kanan');
+        $cetak          .= $this->app_model->maksimal(20,number_format($jmh_tunai,0,',','.'),'kanan');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(13,'Jumlah Debet: ','kiri');
-        $cetak          .= $this->app_model->maksimal(27,number_format($jmh_debet,0,',','.'),'kanan');
+        // $cetak          .= $this->app_model->maksimal(13,'Jumlah Debet: ','kiri');
+        // $cetak          .= $this->app_model->maksimal(19,number_format($jmh_debet,0,',','.'),'kanan');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(14,'Jumlah Kredit: ','kiri');
-        $cetak          .= $this->app_model->maksimal(26,number_format($jmh_kredit,0,',','.'),'kanan');
+        // $cetak          .= $this->app_model->maksimal(14,'Jumlah Kredit: ','kiri');
+        // $cetak          .= $this->app_model->maksimal(18,number_format($jmh_kredit,0,',','.'),'kanan');
 //       $cetak          .= '<br/>';
         $jumlahOTX      = $this->barang_mutasi_model->get_history('',$this->session->userdata('tanggal'),'','','','','1');
 //        $cetak          .= '<br/>';
@@ -610,52 +617,59 @@ class Tutup_shift extends CI_Controller
 //        {
 //            $totalOTX   += (int)$rowOTX->jmh;
 //        }
-        $cetak          .= $this->app_model->maksimal(14,'Jumlah OTX : ','kiri');
-        $cetak          .= $this->app_model->maksimal(26,number_format($jumlahOTX->num_rows(),0,',','.'),'kanan');
+        // $cetak          .= $this->app_model->maksimal(14,'Jumlah OTX : ','kiri');
+        // $cetak          .= $this->app_model->maksimal(18,number_format($jumlahOTX->num_rows(),0,',','.'),'kanan');
 //        $cetak          .= '<br/>';
         $jumlah_diskon  = $this->history_kasir_model->get_diskon($this->session->userdata('tanggal'));
         $jumlah_faktur_diskon  = ($jumlah_diskon->num_rows()>0) ? $jumlah_diskon->row()->jmhfaktur : 0;
         $nilai_diskon   = ($jumlah_diskon->num_rows()>0) ? $jumlah_diskon->row()->nilaidiskon : 0;
-        $cetak          .= $this->app_model->maksimal(40,'Jumlah Faktur didiskon :' .$jumlah_faktur_diskon,'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Jumlah Faktur didiskon :' .$jumlah_faktur_diskon,'kiri');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Nilai Diskon : '.$nilai_diskon,'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Nilai Diskon : '.$nilai_diskon,'kiri');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(20,'Update Harga Terakhir','kiri');
-        $cetak          .= $this->app_model->maksimal(20,$update_harga_terakhir,'kanan');
+        $cetak          .= $this->app_model->maksimal(21,'Update Harga Terakhir','kiri');
+        $cetak          .= $this->app_model->maksimal(11,$update_harga_terakhir,'kanan');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(20,'Faktur Mutasi Terakhir','kiri');
-        $cetak          .= $this->app_model->maksimal(20,$txterakhir,'kanan');
+        $cetak          .= $this->app_model->maksimal(22,'Faktur Mutasi Terakhir','kiri');
+        $cetak          .= $this->app_model->maksimal(10,$txterakhir,'kanan');
 //        $cetak          .= '<br/>';
         $cetak          .= $this->app_model->maksimal(20,'Faktur Jual Terakhir','kiri');
-        $cetak          .= $this->app_model->maksimal(20,$ositerakhir,'kanan');
+        $cetak          .= $this->app_model->maksimal(12,$ositerakhir,'kanan');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(20,'Jumlah Item ter-Update','kiri');
-        $cetak          .= $this->app_model->maksimal(20,$itemupdateharga,'kanan');
+        $cetak          .= $this->app_model->maksimal(22,'Jumlah Item ter-Update','kiri');
+        $cetak          .= $this->app_model->maksimal(10,$itemupdateharga,'kanan');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(20,'Kasir','tengah');
-        $cetak          .= $this->app_model->maksimal(20,'Penerima','tengah');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(16,'Kasir','tengah');
+        $cetak          .= $this->app_model->maksimal(16,'Penerima','tengah');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(20,$this->session->userdata('user_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(20,'__________','tengah');
+        $cetak          .= $this->app_model->maksimal(16,$this->session->userdata('user_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(16,'__________','tengah');
 //        $cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
 //        $cetak          .= '<br/>';
 //        echo $cetak;
 //        die();
-        printer_write($handle,$cetak);
-        printer_end_page($handle);
-        printer_end_doc($handle);
-        printer_close($handle);
+        $printer->initialize();
+        $printer->text($cetak);
+        $printer->text("\n");
+        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
+        $printer->close();
+
+        // printer_write($handle,$cetak);
+        // printer_end_page($handle);
+        // printer_end_doc($handle);
+        // printer_close($handle);
         //redirect('tutup_shift/kosongkan_transaksi');
+        echo '<script type="text/javascript">window.location="'.base_url().'index.php/tutup_shift/sukses_tutup_shift";</script>';
         redirect('tutup_shift');
     }
 
@@ -706,7 +720,7 @@ class Tutup_shift extends CI_Controller
 //                else
 //                {
 //                    $etgl                       = explode('-',$data[$i]['saldo_tgl']);
-//                    $dataSaldoAwal['saldo_tgl'] = date('Y-m-d',mktime(0,0,0,$etgl[1],$etgl[2]+1,$etgl[0],0));
+//                    $dataSaldoAwal['saldo_tgl'] = date('Y-m-d',mktime(0,0,0,$etgl[1],$etgl[2]+1,$etgl[0]));
 //                    $dataSaldoAwal['saldo_shift'] = '1';
 //                }
 //                echo $dataSaldoAwal['saldo_tgl'];
@@ -727,7 +741,7 @@ class Tutup_shift extends CI_Controller
 //                else
 //                {
 //                    $etgl                       = explode('-',$data[$i]['saldo_tgl']);
-//                    $dataSaldoAwal['saldo_tgl'] = date('Y-m-d',mktime(0,0,0,$etgl[1],$etgl[2]+1,$etgl[0],0));
+//                    $dataSaldoAwal['saldo_tgl'] = date('Y-m-d',mktime(0,0,0,$etgl[1],$etgl[2]+1,$etgl[0]));
 //                    $dataSaldoAwal['saldo_shift'] = '1';
 //                }
                 $dataSaldoAwal['saldo_tgl']     = $data[$i]['saldo_tgl'];

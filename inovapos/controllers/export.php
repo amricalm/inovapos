@@ -17,16 +17,16 @@ class Export extends CI_Controller
         if($data['tutup_shift'])
         {
             $etglsekarang               = explode('-',$this->session->userdata('tanggal'));
-            if($this->session->userdata('shift')=='1')
-            {
-                $shiftselanjutnya       = '2';
-                $tglselanjutnya         = $this->session->userdata('tanggal');
-            }
-            else
-            {
+            // if($this->session->userdata('shift')=='1')
+            // {
+            //     $shiftselanjutnya       = '2';
+            //     $tglselanjutnya         = $this->session->userdata('tanggal');
+            // }
+            // else
+            // {
                 $shiftselanjutnya       = '1';
-                $tglselanjutnya         = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0],0));
-            }
+                $tglselanjutnya         = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0]));
+            // }
             $query                      = $this->barang_saldo_model->saldo('',$tglselanjutnya,$shiftselanjutnya);
         }
         else 
