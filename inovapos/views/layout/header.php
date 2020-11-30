@@ -118,7 +118,7 @@
                 </div>
             </div>
             <div style="clear: both;"></div>
-            <div id="subnav">
+            <!-- <div id="subnav">
                 <div class="container_12">
                     <div class="grid_12">
                         <ul>
@@ -140,6 +140,6 @@
                     </div>
                 </div>
                 <div style="clear: both;"></div>
-            </div>
+            </div> -->
         </div>
 		<div class="container_12">

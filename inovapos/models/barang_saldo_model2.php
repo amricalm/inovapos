@@ -145,7 +145,7 @@ class Barang_saldo_model2 extends CI_Model
         $tgls                       = $CI->session->userdata('tanggal');
         $tgl                        = $this->get_tgl_saw($kdbarang);
         $etgls                      = explode('-',$tgls);
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0]));
         
         
         $saldo                      = 0;
@@ -222,8 +222,8 @@ class Barang_saldo_model2 extends CI_Model
         $tgl                        = $this->get_tgl_saw($kdbarang);
         $saldo                      = 0;
         $etgls                      = explode('-',$tgls);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0));
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0]));
         /*
          * Lihat Qty Saldo
          */
@@ -599,8 +599,8 @@ class Barang_saldo_model2 extends CI_Model
         $tgls                       = $CI->session->userdata('tanggal');
         $tgl                        = $this->get_tgl_saw($kdbarang);
         $etgls                      = explode('-',$tgls);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0));
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0]));
         
         /*
          * Lihat Qty Saldo

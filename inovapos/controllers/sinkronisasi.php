@@ -706,7 +706,7 @@ class Sinkronisasi extends CI_Controller
                                         $this->barang_mutasi_model->simpan_dtl_imei($datainputdtlimei);
                                         //echo $k;
                                         $cekimei                    = $this->barang_imei_model->get($datainputdtlimei['kd_barang'],$datainputdtlimei['imei'],'');
-                                        echo $this->db->last_query();
+                                        // echo $this->db->last_query();
                                         if($cekimei->num_rows() > 0)
                                         {
                                             $imeibarang['imei_barang']      = $datainputdtlimei['kd_barang'];
@@ -879,15 +879,21 @@ class Sinkronisasi extends CI_Controller
         $dataglobal     = $this->app_model->general();
         $data           = ($this->input->post('data')!='') ? json_decode($inputdata,true) : $data;
         $cetak          = '';
-        $handle         = printer_open($dataglobal['nama_printer']);
-        printer_set_option($handle, PRINTER_MODE, "RAW");
-        printer_start_doc($handle, "PrintKasir");
-        printer_start_page($handle);
+        // $handle         = printer_open($dataglobal['nama_printer']);
+        // printer_set_option($handle, PRINTER_MODE, "RAW");
+        // printer_start_doc($handle, "PrintKasir");
+        // printer_start_page($handle);
+
+        $this->load->library('escpos');// me-load library escpos
+        // membuat connector printer ke shared printer bernama "POS-58" (yang telah disetting sebelumnya)
+        $connector = new Escpos\PrintConnectors\WindowsPrintConnector($dataglobal['nama_printer']);
+        // membuat objek $printer agar dapat di lakukan fungsinya
+        $printer = new Escpos\Printer($connector);
         for($i=0;$i<count($data);$i++)
         {
             $namagudangasal = $this->outlet_model->outlet_ambil($data[$i]['kd_gudang_asal'])->row()->outlet_nm;
             $namagudangtujuan = $this->outlet_model->outlet_ambil($data[$i]['kd_gudang_tujuan'])->row()->outlet_nm;
-            $cetak      .= $this->app_model->maksimal(40,'SURAT JALAN MUTASI BARANG','tengah');
+            $cetak      .= $this->app_model->maksimal(32,'SURAT JALAN MUTASI BARANG','tengah');
             $cetak      .= $this->app_model->maksimal(8,'Dari','kiri');
             $cetak      .= $this->app_model->maksimal(2,':','kiri');
             $cetak      .= $this->app_model->maksimal(30,$data[$i]['kd_gudang_asal'].$namagudangasal,'kanan');
@@ -896,7 +902,7 @@ class Sinkronisasi extends CI_Controller
             $cetak      .= $this->app_model->maksimal(30,'('.$data[$i]['kd_gudang_tujuan'].')'.$namagudangtujuan,'kanan');
             $cetak      .= $this->app_model->maksimal(20,'No.'.$data[$i]['no_faktur'],'kiri');
             $cetak      .= $this->app_model->maksimal(20,$data[$i]['tgl'],'kanan');
-            $cetak      .= $this->app_model->garis_empatpuluh();
+            $cetak      .= $this->app_model->garis_tigadua();
             for($j=0;$j<count($data[$i]['datadetail']);$j++)
             {
                 $nmbarang = $this->barang_model->get($data[$i]['datadetail'][$j]['kd_barang'],'','','')->row()->barang_nm;
@@ -911,23 +917,29 @@ class Sinkronisasi extends CI_Controller
                         $jmhimei++;
                     }
                 }
-                $cetak  .= $this->app_model->maksimal(40,$nmbarang,'kiri');
+                $cetak  .= $this->app_model->maksimal(32,$nmbarang,'kiri');
                 $cetak  .= $this->app_model->maksimal(20,$data[$i]['datadetail'][$j]['kd_barang'],'kiri');
                 $cetak  .= $this->app_model->maksimal(20,$data[$i]['datadetail'][$j]['qty'],'kanan');
             }
         }
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         $cetak          .= $this->app_model->maksimal(20,'(yg menyerahkan)','tengah');
         $cetak          .= $this->app_model->maksimal(20,'(yg menerima)','tengah');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        printer_write($handle,$cetak);
-        printer_end_page($handle);
-        printer_end_doc($handle);
-        printer_close($handle);
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $printer->initialize();
+        $printer->text($cetak);
+        $printer->text("\n");
+        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
+        $printer->close();
+
+        // printer_write($handle,$cetak);
+        // printer_end_page($handle);
+        // printer_end_doc($handle);
+        // printer_close($handle);
         $redirect                   = ($this->input->post('sumber')!='') ? $this->input->post('sumber') : 'barang/mutasi_barang';
         redirect($redirect);
     }

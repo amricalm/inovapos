@@ -126,7 +126,7 @@ class CI_Calendar {
 		$start_day = ( ! isset($start_days[$this->start_day])) ? 0 : $start_days[$this->start_day];
 
 		// Set the starting day number
-		$local_date = mktime(12, 0, 0, $month, 1, $year);
+		$local_date = mktime(24, 0, 0, $month, 1, $year);
 		$date = getdate($local_date);
 		$day  = $start_day + 1 - $date["wday"];
 

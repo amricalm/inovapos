@@ -47,7 +47,7 @@
         </div> <!-- End .module -->
         <div class="grid_12">       
                 <table style="width:100%;padding:0">
-                    <tr>
+                    <!-- <tr>
                         <td>IMEI</td>
                         <td>
                             <input type="text" name="imei" id="imei" class="input-long" />
@@ -55,9 +55,10 @@
                         <td colspan="2"></td>
                         <td colspan="2"></td>
                         <td colspan="2"></td>
-                    </tr>
+                    </tr> -->
+                    <input type="hidden" name="imei" id="imei" class="input-long" />
                     <tr>
-                        <td>Kode Barang</td>
+                        <td>Barcode /<br>Kode Barang</td>
                         <td>
                             <input type="text" name="barang_kd" id="barang_kd" class="input-long" />
                             <input type="hidden" name="barang_grup" id="barang_grup" class="input-long" />
@@ -214,7 +215,10 @@ $(document).jkey('f12,f10',function(key){
     }
 });
 $('#total').val('0');
-$('#imei').focus();
+$('#barang_kd').focus();
+window.onload = function() {
+  var input = document.getElementById("barang_kd").focus();
+}
 $('#ButtonBayar').live('click',function(){
     var total = $('#total').val();
     if(total!='' && total!='0')
@@ -258,7 +262,7 @@ $('#barang_kd').jkey('f2,return,down,tab,up,z',function(key){
     }
     else if(key=='up')
     {
-        $('#imei').focus();
+        $('#barang_kd').focus();
     }
     else if(key=='z')
     {
@@ -409,7 +413,7 @@ $('#jmh_dk').on('keyup',function(){
 $('img[id^=hapus]').live('click',function(){
     $(this).parents("tr").remove();
     hitung_total();
-    $('#imei').focus();
+    $('#barang_kd').focus();
 });
 $('#cbxpelanggan').live('click',function(){
     if($(this).is(':checked'))
@@ -644,7 +648,7 @@ function addRow(kd,nm,harga,stok,diskon,qty,imei)
     {
         alert("Barang sudah masuk!");
         kosongin();
-        $('#imei').focus();
+        $('#barang_kd').focus();
     }
 }
 function ngecekbarang(lkd,limei)
@@ -735,13 +739,13 @@ function kosongin()
     $('#bayar_bayar').val('0');
     $('#bayar_kembali').val('0');
     
-    $('#imei').focus();
+    $('#barang_kd').focus();
 }
 function hapusBaris(no)
 {
     $('.delete'+no).parents("tr").remove();
     hitung_total();
-    $('#imei').focus();
+    $('#barang_kd').focus();
 }
 function printScreen()
 {
@@ -806,6 +810,8 @@ function SimpanKasirBaru()
     var jmhTunai = parseFloat(totalBelanja) + parseFloat(biayaKartu) - parseFloat(jmhKredit) - parseFloat(jmhDebet); 
     var hasil = totalBelanja + '-' + biayaKartu + '-' + jmhDebet + '-' + jmhKredit;
     var jmh_bayar = $('#bayar_bayar').val();
+    var kembali = convert_to_string($('#bayar_kembali').val());
+
 
     var data = {
         kd_term         : 'KASIR',
@@ -855,6 +861,14 @@ function SimpanKasirBaru()
     });
     
     return false; 
+}
+function print_faktur(faktur)
+{
+    $.post(base_url + 'index.php/kasir/cetak_dari_faktur/'+faktur+'/kasir',function(data)
+    { console.log(base_url + 'index.php/kasir/cetak_dari_faktur/'+faktur+'/kasir');
+        window.location=window.location;
+    })
+    .error(function(){alert("Error Printer!");});
 }
 function frmbayar()
 {    

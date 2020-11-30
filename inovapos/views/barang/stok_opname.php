@@ -48,6 +48,8 @@
     <?php echo form_hidden('shift',$shift); ?>
     
     <?php echo form_hidden('url',base_url().'index.php/'.$this->uri->uri_string()) ?>
+<div class="notification none renggang">Tekan <span style="color: red;">F12</span> untuk menyimpan.</div>
+    
     <div class="module">
     	<h2><span>Daftar Barang</span></h2>
         <div class="module-table-body">

@@ -25,6 +25,7 @@ class Barang_model extends CI_Model
         if($kd!='')
         {
             $this->db->where('barang_kd',$kd);
+            $this->db->or_where('barang_barcode',$kd);
         }
         if($grup!='')
         {

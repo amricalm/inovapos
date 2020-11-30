@@ -39,8 +39,8 @@ class Barang_saldo_model extends CI_Model
         $CI                         =& get_instance();  
         $tglsaldoawal               = $this->get_tgl_saw();
         $etgls                      = explode('-',$tgl);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0));
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0]));
         /*
          * Lihat Qty Saldo
          */
@@ -69,8 +69,8 @@ class Barang_saldo_model extends CI_Model
         $CI                         =& get_instance();  
         $tglsaldoawal               = $this->get_tgl_saw();
         $etgls                      = explode('-',$tgl);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0));
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0]));
         /*
          * Lihat Penjualan
          */
@@ -102,8 +102,8 @@ class Barang_saldo_model extends CI_Model
         $CI                         =& get_instance();  
         $tglsaldoawal               = $this->get_tgl_saw();
         $etgls                      = explode('-',$tgl);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0));     
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0]));     
         /*
          * Lihat Pindah Barang yang tujuannya Gudang lain
          */
@@ -135,8 +135,8 @@ class Barang_saldo_model extends CI_Model
         $CI                         =& get_instance();  
         $tglsaldoawal               = $this->get_tgl_saw();
         $etgls                      = explode('-',$tgl);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0)); 
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0])); 
         /*
          * Lihat Pindah Barang yang tujuannya Gudang lain
          */
@@ -166,8 +166,8 @@ class Barang_saldo_model extends CI_Model
         $CI                         =& get_instance();  
         $tglsaldoawal               = $this->get_tgl_saw();
         $etgls                      = explode('-',$tgl);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0));  
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0]));  
         
         /*
             Lihat Saldo Penyesuaian
@@ -248,8 +248,8 @@ class Barang_saldo_model extends CI_Model
         $CI                         =& get_instance();  
         $tglsaldoawal               = $this->get_tgl_saw();
         $etgls                      = explode('-',$tgl);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0)); 
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0])); 
         $sqlbarang1                 = '';
         $sqlbarang2                 = '';
         if($kdbarang!='')
@@ -338,8 +338,8 @@ class Barang_saldo_model extends CI_Model
         $CI                         =& get_instance();  
         $tglsaldoawal               = $this->get_tgl_saw();
         $etgls                      = explode('-',$tgl);
-        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0],0));
-        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0],0)); 
+        $tgl_sebelumnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]-1,$etgls[0]));
+        $tgl_sesudahnya             = date('Y-m-d',mktime(0,0,0,$etgls[1],$etgls[2]+1,$etgls[0])); 
         $sql                        = "SELECT kd_barang,barang_kd,barang_nm,barang_harga_jual as harga_jual,barang_group,imei,imei as saldo_imei
                                 FROM
                                 (
@@ -540,16 +540,16 @@ class Barang_saldo_model extends CI_Model
         $shiftsekarang                  = $CI->session->userdata('shift');
         $tglsekarang                    = $CI->session->userdata('tanggal');
         $etglsekarang                   = explode('-',$tglsekarang);
-        if($shiftsekarang=='1')
-        {
-            $shiftsebelumnya            = '2';
-            $tglsebelumnya              = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]-1,$etglsekarang[0],0));
-        }
-        else
-        {
+        // if($shiftsekarang=='1')
+        // {
+        //     $shiftsebelumnya            = '2';
+        //     $tglsebelumnya              = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]-1,$etglsekarang[0]));
+        // }
+        // else
+        // {
             $shiftsebelumnya            = '1';
             $tglsebelumnya              = $tglsekarang;
-        }
+        // }
         
         /*
          |
@@ -635,20 +635,21 @@ class Barang_saldo_model extends CI_Model
         $shiftsekarang                  = $CI->session->userdata('shift');
         $tglsekarang                    = $CI->session->userdata('tanggal');
         $etglsekarang                   = explode('-',$tglsekarang);
-        if($shiftsekarang=='1')
-        {
-            $shiftsebelumnya            = '2';
-            $tglsebelumnya              = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]-1,$etglsekarang[0]));
-        }
-        else
-        {
+        // if($shiftsekarang=='1')
+        // {
+        //     $shiftsebelumnya            = '2';
+        //     $tglsebelumnya              = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]-1,$etglsekarang[0]));
+        // }
+        // else
+        // {
             $shiftsebelumnya            = '1';
             $tglsebelumnya              = $tglsekarang;
-        }
+        // }
         
         if($kdbarang!='')
         {
             $CI->db->where('barang_kd',$kdbarang);
+            $CI->db->or_where('barang_barcode',$kdbarang);
         }
         $CI->db->join('im_mgroup_barang','group_kd=barang_group','left outer');
         $barang                         = $CI->db->get('im_mbarang');
@@ -685,6 +686,7 @@ class Barang_saldo_model extends CI_Model
                                             WHERE kd_gudang_tujuan = '$kodegudang'
                                             AND kd_barang = '$kodebarang'
                                             /*AND date(tgl) = '$tglsekarang'*/";
+                                            echo $this->db->last_query(); die();
                 $qtymutasimasuk             = ($this->db->query($mutasimasuk)->num_rows()>0) ? $this->db->query($mutasimasuk)->row()->qty : 0;
                 
                 $penyesuaian                = " SELECT IFNULL(SUM(qty),0) AS qty
@@ -714,6 +716,8 @@ class Barang_saldo_model extends CI_Model
                                             WHERE saldo_barang = '$kodebarang'
                                             AND saldo_tgl = '$tglsekarang'
                                             AND saldo_shift = '$shiftsekarang'";
+        
+                
                 $qtysaldoawal               = ($this->db->query($saldo_awal)->num_rows()>0) ? $this->db->query($saldo_awal)->row()->qty : 0;
                 $penjualan                  = " SELECT IFNULL(SUM(qty),0) AS qty
                                             FROM ac_tjual_dtl dtl
@@ -731,6 +735,12 @@ class Barang_saldo_model extends CI_Model
                                             AND kd_barang = '$kodebarang'
                                             /*AND date(tgl) = '$tglsekarang'*/";
                 $qtymutasimasuk             = ($this->db->query($mutasimasuk)->num_rows()>0) ? $this->db->query($mutasimasuk)->row()->qty : 0;
+                $pembelian                  = " SELECT IFNULL(SUM(qty),0) AS qty 
+                                            FROM ac_tbeli_dtl dtl 
+                                            INNER JOIN ac_tbeli hdr 
+                                            ON dtl.no_faktur = hdr.no_faktur
+                                            AND kd_barang = '$kodebarang'";
+                $qtypembelian               = ($this->db->query($pembelian)->num_rows()>0) ? $this->db->query($pembelian)->row()->qty : 0;
                 $mutasikeluar               = " SELECT IFNULL(SUM(qty),0) AS qty
                                             FROM im_tpindah_barang_dtl dtl
                                             INNER JOIN im_tpindah_barang hdr
@@ -768,13 +778,14 @@ class Barang_saldo_model extends CI_Model
                                             
                 $qty_tukar_keluar           = ($this->db->query($sql_tukar_keluar)->num_rows()>0) ? $this->db->query($sql_tukar_keluar)->row()->qty:0;
                 
-                $qtysaldo                   = ((int)$qtysaldoawal+(int)$qtymutasimasuk+(int)$qtypenyesuaian) - ((int)$qtymutasikeluar+(int)$qtypenjualan) + (int) $qty_tukar_masuk - (int)$qty_tukar_keluar;
+                $qtysaldo                   = ((int)$qtysaldoawal+(int)$qtymutasimasuk+(int)$qtypenyesuaian+(int)$qtypembelian) - ((int)$qtymutasikeluar+(int)$qtypenjualan) + (int) $qty_tukar_masuk - (int)$qty_tukar_keluar;
                 
                 $data[$i]['saldo_qty']      = $qtysaldo;
                 $data[$i]['saldo_awal']     = $qtysaldoawal;
                 $data[$i]['mutasi_masuk']   = $qtymutasimasuk;
                 $data[$i]['mutasi_keluar']  = $qtymutasikeluar;
                 $data[$i]['penjualan']      = $qtypenjualan;
+                $data[$i]['pembelian']      = $qtypembelian;
                 $data[$i]['penyesuaian']    = $qtypenyesuaian;
                 $data[$i]['saldo_shift']    = $shiftsekarang;
                 $data[$i]['saldo_tgl']      = $tglsekarang;
@@ -786,6 +797,7 @@ class Barang_saldo_model extends CI_Model
             }
             $i++;
         }
+        // echo $this->db->last_query();
         return $data;
     }
     function saldo_hari($kdbarang='',$tgl='',$shift='')
@@ -875,17 +887,17 @@ class Barang_saldo_model extends CI_Model
                 $dataSaldoAwal['saldo_barang']  = $data[$i]['saldo_barang'];
                 $dataSaldoAwal['saldo_gudang']  = $data[$i]['saldo_gudang'];
                 $dataSaldoAwal['saldo_qty']     = $data[$i]['saldo_qty'];
-                if($data[$i]['saldo_shift']=='1')
-                {
-                    $dataSaldoAwal['saldo_tgl'] = $data[$i]['saldo_tgl'];
-                    $dataSaldoAwal['saldo_shift'] = '2'; 
-                }
-                else
-                {
+                // if($data[$i]['saldo_shift']=='1')
+                // {
+                //     $dataSaldoAwal['saldo_tgl'] = $data[$i]['saldo_tgl'];
+                //     $dataSaldoAwal['saldo_shift'] = '2'; 
+                // }
+                // else
+                // {
                     $etgl                       = explode('-',$data[$i]['saldo_tgl']);
-                    $dataSaldoAwal['saldo_tgl'] = date('Y-m-d',mktime(0,0,0,$etgl[1],$etgl[2]+1,$etgl[0],0));
+                    $dataSaldoAwal['saldo_tgl'] = date('Y-m-d',mktime(0,0,0,$etgl[1],$etgl[2]+1,$etgl[0]));
                     $dataSaldoAwal['saldo_shift'] = '1';
-                }
+                // }
                 
 //                if(!$this->db->insert('im_msaldo_barang',$dataSaldoAwal))
 //                {
@@ -931,16 +943,16 @@ class Barang_saldo_model extends CI_Model
         $shiftsekarang                  = $CI->session->userdata('shift');
         $tglsekarang                    = $CI->session->userdata('tanggal');
         $etglsekarang                   = explode('-',$tglsekarang);
-        if($shiftsekarang=='1')
-        {
-            $shiftsebelumnya            = '2';
-            $tglsebelumnya              = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]-1,$etglsekarang[0],0));
-        }
-        else
-        {
+        // if($shiftsekarang=='1')
+        // {
+        //     $shiftsebelumnya            = '2';
+        //     $tglsebelumnya              = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]-1,$etglsekarang[0]));
+        // }
+        // else
+        // {
             $shiftsebelumnya            = '1';
             $tglsebelumnya              = $tglsekarang;
-        }
+        // }
         
         if($kdbarang!='')
         {

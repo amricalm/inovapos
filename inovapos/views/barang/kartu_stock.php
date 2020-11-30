@@ -16,8 +16,8 @@
                 <td><?php 
                     echo '<span style="vertical-align:middle">';
                     echo ($this->session->userdata('shift')=='1') ? form_radio('shift','1',true).' 1 </span>' : form_radio('shift','1').' 1 </span>';
-                    echo '<span style="vertical-align:middle">';
-                    echo ($this->session->userdata('shift')=='2') ? form_radio('shift','2',true).' 2 </span>' : form_radio('shift','2').' 2 </span>' ?></td>
+                    // echo '<span style="vertical-align:middle">';
+                    // echo ($this->session->userdata('shift')=='2') ? form_radio('shift','2',true).' 2 </span>' : form_radio('shift','2').' 2 </span>' ?></td>
             </tr>
             <tr>
                 <td width="35%">Pilih Kelompok Barang</td>
@@ -70,7 +70,7 @@
                             $penyesuaiannegatif = ($saldo[0]['penyesuaian']<0) ? $saldo[0]['penyesuaian'] : 0;
                         ?> 
                         <td><?php echo number_format($saldo[0]['saldo_awal'],0,',','.') ?></td>
-                        <td><?php echo number_format($saldo[0]['mutasi_masuk']+$saldo[0]['tukar_masuk']+$penyesuaianpositif,0,',','.') ?></td>
+                        <td><?php echo number_format($saldo[0]['pembelian']+$saldo[0]['mutasi_masuk']+$saldo[0]['tukar_masuk']+$penyesuaianpositif,0,',','.') ?></td>
                         <td><?php echo number_format($saldo[0]['mutasi_keluar']+$saldo[0]['tukar_keluar']+$penyesuaiannegatif+$saldo[0]['penjualan'],0,',','.') ?></td>
                         <td><?php echo number_format(($saldo[0]['saldo_qty']),0,',','.') ?></td>
                         

@@ -98,7 +98,7 @@ class History_kasir_model extends CI_Model
             if($tgldari==$tglsampai)
             {
                 $etglsekarang               = explode('-',$tgldari);
-                $tglsampai                  = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0],0));
+                $tglsampai                  = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0]));
                 $stgldari                   = " AND DATE(tgl) >= '$tgldari' ";
                 $stglsampai                 = " AND DATE(tgl) < '$tglsampai' ";
             }

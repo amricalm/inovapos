@@ -45,7 +45,6 @@ class Barang extends CI_Controller
         $config                     = $this->adnpagination->config($base_url,$total_rows,$per_page,$uri_segment);
         $this->pagination->initialize($config); 
         $data['data']               = $this->barang_model->get('',$per_page,$offset,$data['txtcari'],$data['cbogrup']);
-        //echo $this->db->last_query();
         $data['data_group']         = $this->group_barang_model->get('','','','');
         $data['halaman']            = 'barang/index';
         $data['judulweb']           = ' | Daftar Barang';
@@ -157,6 +156,33 @@ class Barang extends CI_Controller
         $data['data']               = $this->barang_model->get_elektrik('',$per_page,$offset,$data['txtcari']);
         //echo $this->db->last_query();
         
+        $this->load->view('layout/index',$data);
+    }
+    function list_barang_doang_temp($elemen=0,$offset=0)
+    {
+        $data                       = $this->app_model->general();
+        $data['option_tampilan']    = 'tanpa_menu';
+        $data['halaman']            = 'list_barang_doang_temp';
+        $txtcari                    = ($this->input->post('submit')!='') ? $this->input->post('search') : $this->session->userdata('txtcaribarang');
+        $this->session->set_userdata(array('txtcaribarang'=>$txtcari));
+        $grup                       = ($this->input->post('submit')!='') ? $this->input->post('grup') : $this->session->userdata('cbogrupbarang');
+        $this->session->set_userdata(array('cbogrupbarang'=>$grup));
+        $data['txtcari']            = $this->session->userdata('txtcaribarang');
+        $data['cbogrup']            = $this->session->userdata('cbogrupbarang');
+
+        $data['data_all']           = $this->barang_model->get('','','',$data['txtcari'],$data['cbogrup']);
+        $base_url                   = base_url().'index.php/barang/list_barang_temp/'.$elemen;
+        $total_rows                 = $data['data_all']->num_rows();
+        $per_page                   = 30;
+        $uri_segment                = 4;
+        
+        $config                     = $this->adnpagination->config($base_url,$total_rows,$per_page,$uri_segment);
+        $this->pagination->initialize($config); 
+
+
+        $data['data_group']         = $this->group_barang_model->get('','','','');
+        $data['data']               = $this->barang_model->get('',$per_page,$offset,$data['txtcari'],$data['cbogrup']);
+
         $this->load->view('layout/index',$data);
     }
     function list_imei($kdbarang)
@@ -271,13 +297,13 @@ class Barang extends CI_Controller
     {
         $this->load->model('barang_saldo_model', 'saldo');
         $barang =  $this->barang_model->get($kd,'','','');
-        //echo $this->db->last_query();
+        // echo $this->db->last_query();
         if($barang->num_rows()>0)
         { 
             $saldo  = $this->saldo->saldo_hari_ini($kd);
             if($saldo[0]['saldo_qty']!='0')
             {
-                echo 'S#'.$barang->row()->barang_kd.'#'.$barang->row()->barang_nm.'#' . ($saldo[0]['saldo_qty']) .'#'.$barang->row()->barang_harga_jual.'#'.$barang->row()->barang_group.'#'.$barang->row()->group_hp.'#'.$barang->row()->group_elektrik;
+                echo 'S#'.$barang->row()->barang_kd.'#'.$barang->row()->barang_nm.'#' . ($saldo[0]['saldo_qty']) .'#'.$barang->row()->barang_harga_jual.'#'.$barang->row()->barang_group.'#'.$barang->row()->group_hp.'#'.$barang->row()->group_elektrik.'#'.$barang->row()->barang_satuan;
             }
             else
             {
@@ -402,7 +428,7 @@ class Barang extends CI_Controller
     {
         $jmh_stok   = 0;
         $hp         = 0;
-        $error                      = '';
+        $error      = '';
 
         $kd_barang              = $this->input->post('saldo_barang');
         $tgl                    = $this->input->post('saldo_tgl');
@@ -834,16 +860,16 @@ class Barang extends CI_Controller
         if($data['tutup_shift'])
         {
             $etglsekarang               = explode('-',$this->session->userdata('tanggal'));
-            if($this->session->userdata('shift')=='1')
-            {
-                $shiftselanjutnya       = '2';
-                $tglselanjutnya         = $this->session->userdata('tanggal');
-            }
-            else
-            {
+            // if($this->session->userdata('shift')=='1')
+            // {
+            //     $shiftselanjutnya       = '2';
+            //     $tglselanjutnya         = $this->session->userdata('tanggal');
+            // }
+            // else
+            // {
                 $shiftselanjutnya       = '1';
-                $tglselanjutnya         = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0],0));
-            }
+                $tglselanjutnya         = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0]));
+            // }
             $query                      = $this->barang_saldo_model->saldo('',$tglselanjutnya,$shiftselanjutnya);
         }
         else 
@@ -973,6 +999,11 @@ class Barang extends CI_Controller
         $data                       = $this->app_model->general();
         switch($trx)
         {
+            case 'tambah' :
+                $data['option_tampilan']        = 'tanpa_menu';
+                $data['halaman']                = 'barang/tambah';
+                $this->load->view('layout/index',$data);
+                break;
             case 'edit' :
                 if($this->session->userdata('user_nm')=='' || $this->session->userdata('user_group')=="Kasir" || $this->session->userdata('user_group')=='SPV')
                 {
@@ -982,6 +1013,9 @@ class Barang extends CI_Controller
                 $data['halaman']                = 'barang/edit';
                 $data['data']                   = $this->barang_model->get($this->uri->segment(4),'','','');
                 $this->load->view('layout/index',$data);
+                break;
+            case 'hapus' :
+                $this->barang_exec($trx,$this->uri->segment(4));
                 break;
         }
     }
@@ -1005,13 +1039,30 @@ class Barang extends CI_Controller
     function barang_exec($trx)
     {
         $hargasebelumnya                        = $this->barang_model->get($this->input->post('barang_kd'),'','','','','')->row()->barang_harga_jual;
+        $data['barang_barcode']                 = $this->input->post('barcode_barang');
+        $data['barang_kd']                      = $this->input->post('kd_barang');
+        $data['barang_nm']                      = $this->input->post('nm_barang');
+        $data['barang_group']                   = $this->input->post('kd_group');
+        $data['barang_satuan']                  = $this->input->post('kd_satuan');
+        $data['barang_stok_min']                = $this->input->post('stok_min_barang');
         $data['barang_harga_jual']              = $this->input->post('barang_harga_jual');
         switch($trx)
         {
+            case 'tambah' :
+                $data['uid']                = $this->session->userdata('user_kd');
+                $data['doe']                = date('Y-m-d h:i:s');
+                if($this->barang_model->simpan($data))
+                {
+                    echo '<script type="text/javascript">alert("Berhasil disimpan!");parent.iclose();</script>';
+                }
+                else
+                {
+                    echo '<script type="text/javascript">alert("Gagal disimpan");</script>';
+                }
+                break;
             case 'edit' :
                 if($this->barang_model->update($this->input->post('barang_kd'),$data))
                 {
-                    $this->cetak_update_harga($this->input->post('barang_kd'));
                     $log['log_col']             = 'UPDATE HARGA MANUAL';
                     $log['log_val']             = $this->input->post('barang_kd').'#'.$hargasebelumnya.'#'.$data['barang_harga_jual'];
                     $log['tgl']                 = $this->session->userdata('tanggal').' '.date('H:i:s');
@@ -1027,6 +1078,10 @@ class Barang extends CI_Controller
                     echo '<script type="text/javascript">alert("Gagal diupdate");</script>';
                 }
                 break;
+            case 'hapus' :
+                    $this->barang_model->hapus($this->uri->segment(4));
+                    redirect('barang/daftar');
+                    break;
         }
     }
     function barang_elektrik_exec($trx)
@@ -1064,10 +1119,16 @@ class Barang extends CI_Controller
         $tgl_saw        = $this->sys_var_model->get(PERIODE_SAW_BARANG);
         $data           = $this->barang_model->get('','','','','');
         //$data		    = $this->barang_saldo_model->get_saw($tgl_saw);
-        $handle         = printer_open($dataglobal['nama_printer']);
-        printer_set_option($handle, PRINTER_MODE, "RAW");
-        printer_start_doc($handle, "PrintKasir");
-        printer_start_page($handle);
+        // $handle         = printer_open($dataglobal['nama_printer']);
+        // printer_set_option($handle, PRINTER_MODE, "RAW");
+        // printer_start_doc($handle, "PrintKasir");
+        // printer_start_page($handle);
+
+        $this->load->library('escpos');// me-load library escpos
+        // membuat connector printer ke shared printer bernama "POS-58" (yang telah disetting sebelumnya)
+        $connector = new Escpos\PrintConnectors\WindowsPrintConnector($dataglobal['nama_printer']);
+        // membuat objek $printer agar dapat di lakukan fungsinya
+        $printer = new Escpos\Printer($connector);
 
         if ($judul!='')
         {
@@ -1077,13 +1138,13 @@ class Barang extends CI_Controller
         {
             $judul = 'Laporan Stock';
         }
-        $cetak          .= $this->app_model->maksimal(40,$judul,'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('outlet_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('user_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('tanggal').' '.date('H:i:s'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,'Shift : '.$this->session->userdata('shift'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$judul,'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('outlet_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('user_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('tanggal').' '.date('H:i:s'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,'Shift : '.$this->session->userdata('shift'),'tengah');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         //$cetak          .= '<br/>';
         foreach($data->result() as $rowbarang)
         {
@@ -1096,23 +1157,29 @@ class Barang extends CI_Controller
                 //$cetak          .= '<br/>';
             }
         }
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Dicetak: ' . date('Y-m-d H:i'), 'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Dicetak: ' . date('Y-m-d H:i'), 'kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
         //echo $cetak;
         //die();
         
-        printer_write($handle,$cetak);
-        printer_end_page($handle);
-        printer_end_doc($handle);
-        printer_close($handle);
+        $printer->initialize();
+        $printer->text($cetak);
+        $printer->text("\n");
+        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
+        $printer->close();
+
+        // printer_write($handle,$cetak);
+        // printer_end_page($handle);
+        // printer_end_doc($handle);
+        // printer_close($handle);
         redirect('barang');
     }
     
@@ -1125,10 +1192,16 @@ class Barang extends CI_Controller
         $tgl_saw        = $this->sys_var_model->get(PERIODE_SAW_BARANG);
         $data           = $this->barang_model->get('','','','','');
         //$data		    = $this->barang_saldo_model->get_saw($tgl_saw);
-        $handle         = printer_open($dataglobal['nama_printer']);
-        printer_set_option($handle, PRINTER_MODE, "RAW");
-        printer_start_doc($handle, "PrintKasir");
-        printer_start_page($handle);
+        // $handle         = printer_open($dataglobal['nama_printer']);
+        // printer_set_option($handle, PRINTER_MODE, "RAW");
+        // printer_start_doc($handle, "PrintKasir");
+        // printer_start_page($handle);
+
+        $this->load->library('escpos');// me-load library escpos
+        // membuat connector printer ke shared printer bernama "POS-58" (yang telah disetting sebelumnya)
+        $connector = new Escpos\PrintConnectors\WindowsPrintConnector($dataglobal['nama_printer']);
+        // membuat objek $printer agar dapat di lakukan fungsinya
+        $printer = new Escpos\Printer($connector);
 
         if ($judul!='')
         {
@@ -1138,29 +1211,29 @@ class Barang extends CI_Controller
         {
             $judul = 'Laporan Stock';
         }
-        $cetak          .= $this->app_model->maksimal(40,$judul,'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('outlet_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('user_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('tanggal').' '.date('H:i:s'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,'Shift : '.$this->session->userdata('shift'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$judul,'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('outlet_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('user_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('tanggal').' '.date('H:i:s'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,'Shift : '.$this->session->userdata('shift'),'tengah');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         //$cetak          .= '<br/>';
         foreach($data->result() as $rowbarang)
         {
             if($judul!='')
             {
                 $etglsekarang                   = explode('-',$this->session->userdata('tanggal'));
-                if($this->session->userdata('shift')=='1')
-                {
-                    $shiftselanjutnya           = '2';
-                    $tglselanjutnya             = $this->session->userdata('tanggal');
-                }
-                else
-                {
+                // if($this->session->userdata('shift')=='1')
+                // {
+                //     $shiftselanjutnya           = '2';
+                //     $tglselanjutnya             = $this->session->userdata('tanggal');
+                // }
+                // else
+                // {
                     $shiftselanjutnya           = '1';
-                    $tglselanjutnya             = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0],0));
-                }
+                    $tglselanjutnya             = date('Y-m-d',mktime(0,0,0,$etglsekarang[1],$etglsekarang[2]+1,$etglsekarang[0]));
+                // }
                 $saldo          = $this->barang_saldo_model->saldo($rowbarang->barang_kd,$tglselanjutnya,$shiftselanjutnya);
             }
             else
@@ -1175,23 +1248,29 @@ class Barang extends CI_Controller
                 //$cetak          .= '<br/>';
             }
         }
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,'Dicetak: ' . date('Y-m-d H:i'), 'kiri');
+        $cetak          .= $this->app_model->maksimal(32,'Dicetak: ' . date('Y-m-d H:i'), 'kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
         //$cetak          .= '<br/>';
         //echo $cetak;
         //die();
         
-        printer_write($handle,$cetak);
-        printer_end_page($handle);
-        printer_end_doc($handle);
-        printer_close($handle);
+        $printer->initialize();
+        $printer->text($cetak);
+        $printer->text("\n");
+        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
+        $printer->close();
+
+        // printer_write($handle,$cetak);
+        // printer_end_page($handle);
+        // printer_end_doc($handle);
+        // printer_close($handle);
         if($judul=='')
         {
             redirect('barang');
@@ -1238,30 +1317,42 @@ class Barang extends CI_Controller
         $dataglobal     = $this->app_model->general();
         $cetak          = '';
         $data           = $this->barang_model->get($kdbarang,'','','','');
-        $handle         = printer_open($dataglobal['nama_printer']);
-        printer_set_option($handle, PRINTER_MODE, "RAW");
-        printer_start_doc($handle, "PrintKasir");
-        printer_start_page($handle);
-        $cetak          .= $this->app_model->maksimal(40,$this->session->userdata('outlet_nm'),'tengah');
-        $cetak          .= $this->app_model->maksimal(40,'PERUBAHAN HARGA MANUAL','tengah');
+        // $handle         = printer_open($dataglobal['nama_printer']);
+        // printer_set_option($handle, PRINTER_MODE, "RAW");
+        // printer_start_doc($handle, "PrintKasir");
+        // printer_start_page($handle);
+
+        $this->load->library('escpos');// me-load library escpos
+        // membuat connector printer ke shared printer bernama "POS-58" (yang telah disetting sebelumnya)
+        $connector = new Escpos\PrintConnectors\WindowsPrintConnector($dataglobal['nama_printer']);
+        // membuat objek $printer agar dapat di lakukan fungsinya
+        $printer = new Escpos\Printer($connector);
+        $cetak          .= $this->app_model->maksimal(32,$this->session->userdata('outlet_nm'),'tengah');
+        $cetak          .= $this->app_model->maksimal(32,'PERUBAHAN HARGA MANUAL','tengah');
         $cetak          .= $this->app_model->maksimal(20,'Tanggal Sesi : ','kiri');
         $cetak          .= $this->app_model->maksimal(20,$this->session->userdata('tanggal'),'kanan');
         $cetak          .= $this->app_model->maksimal(20,'Cetak : ','kiri');
         $cetak          .= $this->app_model->maksimal(20,date('Y-m-d H:i:s'),'kanan');        
         $cetak          .= $this->app_model->maksimal(20,'Shift : '.$this->session->userdata('shift'),'kiri');
         $cetak          .= $this->app_model->maksimal(20,'Oleh : '.$this->session->userdata('user_nm'),'kanan');
-        $cetak          .= $this->app_model->garis_empatpuluh();
+        $cetak          .= $this->app_model->garis_tigadua();
         $cetak          .= $this->app_model->maksimal(12,$data->row()->barang_kd,'kiri');
         $cetak          .= $this->app_model->maksimal(18,$data->row()->barang_nm,'kiri');
         $cetak          .= $this->app_model->maksimal(10,$data->row()->barang_harga_jual,'kanan');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        $cetak          .= $this->app_model->maksimal(40,' ','kiri');
-        //$cetak          .= $this->app_model->garis_empatpuluh();
-        printer_write($handle,$cetak);
-        printer_end_page($handle);
-        printer_end_doc($handle);
-        printer_close($handle);
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        $cetak          .= $this->app_model->maksimal(32,' ','kiri');
+        //$cetak          .= $this->app_model->garis_tigadua();
+        $printer->initialize();
+        $printer->text($cetak);
+        $printer->text("\n");
+        $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
+        $printer->close();
+
+        // printer_write($handle,$cetak);
+        // printer_end_page($handle);
+        // printer_end_doc($handle);
+        // printer_close($handle);
     }
 }
 

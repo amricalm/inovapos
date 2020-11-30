@@ -16,7 +16,7 @@
 */
 //$config['service_url']	= 'http://101.255.73.422/inovagl_local/index.php/';
 $config['service_url']	= 'http://101.255.73.422/inovagl_local/index.php/';
-$config['versi']        = '14.0';
+$config['versi']        = '14.1';
 
 
 /* End of file config.php */

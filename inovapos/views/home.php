@@ -28,8 +28,8 @@
                             <h5 style="color:blue;">Omset Shift Ini :<span style="float: right;">Rp. <?php echo number_format($this->kasir_model->get_jmh($this->session->userdata('tanggal'),$this->session->userdata('shift')),0,',','.');//echo $this->db->last_query();  ?></span></h5>
                             <input type="hidden" value="<?php echo $this->db->last_query(); ?>" />
                             <h5 style="color: green;">Diskon : <span style="float: right;">Rp. <?php echo number_format($this->kasir_model->get_diskon($this->session->userdata('tanggal'),$this->session->userdata('shift'))->row()->total,0,',','.');  ?></span></h5>
-                            <h5 style="color: red;">Saldo Elektrik <span style="float: right;"><blink>Rp. <?php $saldo = $this->barang_saldo_model->get_saldo_elektrik();/*print_r($saldo);*/ echo number_format($saldo['saldo_qty'],0,',','.'); ?></blink></span></h5>
-                            <h5 style="color: orange;">Faktur Mutasi Terakhir : <span style="float: right;"><?php echo ($this->barang_mutasi_model->get_max()->row()->no_faktur > $this->barang_mutasi_model->get_max_history()->row()->no_faktur) ? $this->barang_mutasi_model->get_max()->row()->no_faktur : $this->barang_mutasi_model->get_max_history()->row()->no_faktur; ?></span></h5>
+                            <!-- <h5 style="color: red;">Saldo Elektrik <span style="float: right;"><blink>Rp. <?php $saldo = $this->barang_saldo_model->get_saldo_elektrik();/*print_r($saldo);*/ echo number_format($saldo['saldo_qty'],0,',','.'); ?></blink></span></h5> -->
+                            <!-- <h5 style="color: orange;">Faktur Mutasi Terakhir : <span style="float: right;"><?php echo ($this->barang_mutasi_model->get_max()->row()->no_faktur > $this->barang_mutasi_model->get_max_history()->row()->no_faktur) ? $this->barang_mutasi_model->get_max()->row()->no_faktur : $this->barang_mutasi_model->get_max_history()->row()->no_faktur; ?></span></h5> -->
                             <input type="hidden" value="<?php echo $this->db->last_query(); ?>" />
                             <h5 style="color:violet">Penjualan : <span style="float: right;"><?php echo ($this->kasir_model->get_max()->row()->no_faktur > $this->kasir_model->get_max_history()->row()->no_faktur) ? $this->kasir_model->get_max()->row()->no_faktur : $this->kasir_model->get_max_history()->row()->no_faktur; ?></span></h5>
                             <h5></h5>
@@ -37,7 +37,7 @@
                 </div>
                 <div style="clear:both;"></div>
             </div>
-            <div class="grid_5">
+            <!-- <div class="grid_5">
                 <div class="module">
                         <h2><span></span></h2>
                         <div class="module-body">
@@ -50,7 +50,7 @@
                         </div>
                 </div>
                 <div style="clear:both;"></div>
-            </div>
+            </div> -->
             <div style="clear:both;"></div>
             <script type="text/javascript">
                 setTimeout("Redirect()",5000); 
