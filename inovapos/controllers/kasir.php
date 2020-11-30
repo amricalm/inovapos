@@ -507,9 +507,9 @@ class Kasir extends CI_Controller
                     $nmBarang       = $datadetail[$i][1];
                     $qty            = $datadetail[$i][2]; 
                     $harga          = /*str_replace('.','',$data['rows'][$i][3]);*/$this->barang_model->get($datadetail[$i][0],'','','')->row()->barang_harga_jual;
-                    $diskonPersen   = ((float)str_replace('.','',$datadetail[$i][4])/$harga)*100;
-                    $diskon         = $datadetail[$i][4];
-                    $jmh            = ($qty * $harga) - $diskon;
+                    $diskonPersen   = (((float)str_replace('.','',$datadetail[$i][4])/$qty*100))/$harga;
+                    $diskon         = ($diskonPersen/100)*$harga;
+                    $jmh            = $qty * ($harga - $diskon);
                     
                     $datadtl['no_faktur']   = $data['no_faktur'];
                     $datadtl['kd_barang']   = $kdBarang;
@@ -771,7 +771,7 @@ class Kasir extends CI_Controller
             $datareplace['kembali']                     = $datareplace['jmh'] - ($data['jmh_kredit']+$data['jmh_debet']+$datareplace['tunai']);
         }
         $data['jmh']    = $datareplace['jmh'];
-        $data['total']  = $datareplace['total'];
+        // $data['total']  = $datareplace['total'];
         $data['tunai']  = $datareplace['tunai'];
         $data['kembali']= $datareplace['kembali'];
         $dataglobal     = $this->app_model->general();
@@ -846,7 +846,7 @@ class Kasir extends CI_Controller
         $cetak          .= $this->app_model->maksimal(22,number_format($data['jmh_tunai'],0,',','.'),'kanan');
 //        $cetak          .= "<br/>";
         $cetak          .= $this->app_model->maksimal(15,'UANG KEMBALI:','kiri');
-        $cetak          .= $this->app_model->maksimal(17,number_format(($data['jmh_tunai']-$data['tunai']),0,',','.'),'kanan');
+        $cetak          .= $this->app_model->maksimal(17,number_format(($data['jmh_tunai']-$data['total']),0,',','.'),'kanan');
 //        $cetak          .= "<br/>";
         
         if($data['kd_pelanggan']!=''&&$data['kd_pelanggan']!='0')

@@ -16,7 +16,7 @@ class App_model extends CI_Model
         $this->global['base_img']           = $this->config->item('base_url').'inovapos_asset/img';
         $this->global['base_js']            = $this->config->item('base_url').'inovapos_asset/js';
         $this->global['base_upload']        = $_SERVER['DOCUMENT_ROOT'].'/'.$separator[count($separator)-2].'/inovapos_data/';
-        $this->global['nama_printer']       = ($this->system('nama_printer')!='')?$this->system('nama_printer'):'POS-58';
+        $this->global['nama_printer']       = ($this->system('nama_printer')!='')?$this->system('nama_printer'):'EPSON TM-U220';
         $this->global['tutup_shift']        = $this->log->cekTutupShift($CI->session->userdata('tanggal'),$CI->session->userdata('shift'));
         $this->global['tutup_stok']         = $this->log->cekTutupStok($CI->session->userdata('tanggal'),'');
         $this->global['versi']              = $this->config->item('versi');                                                /*$this->system('versi')*/

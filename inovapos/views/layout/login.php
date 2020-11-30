@@ -23,7 +23,7 @@
 		</div>
 		<form class="form" action="<?php echo base_url(); ?>index.php/login/submit" method="post">
 		Pengguna<br/>
-		<input name="username" id="username" style="width: 310px;" type="text"/><br/>
+		<input name="username" id="username" style="width: 310px;" type="text" autocomplete="off"/><br/>
 		Password<br/>
 		<input name="password" style="width: 310px;" type="password"/><br/>
         <!--Shift : <?php echo form_radio('shift',1,true).'&nbsp;Satu&nbsp;'.form_radio('shift',2,false).'&nbsp;Dua&nbsp;'; ?><br />-->

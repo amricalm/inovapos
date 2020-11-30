@@ -618,8 +618,8 @@ function addRow(kd,nm,harga,stok,diskon,qty,imei)
                 	var tblnm = '<td class="atas"><textarea class="barangnm" disabled="disabled" id="nm'+lastRow+'">'+nm+'</textarea></td>';
                 	var tblqt = '<td class="atas"><input id="qty'+lastRow+'" class="kanan" value="'+qty+'" disabled="disabled"/></td>';
                 	var tblhg = '<td class="atas"><input id="hrg'+lastRow+'" class="kanan" value="'+convert_to_numeric(harga)+'" disabled="disabled"/></td>';
-                    if(diskon=='') diskon = 0; 
-                    var jmhdiskon = (diskon==0) ? 0 : (parseFloat(diskon)/100)*parseFloat(convert_to_string(harga));
+                    if(diskon=='') diskon = 0;
+                    var jmhdiskon = (diskon==0) ? 0 : (parseFloat(diskon)/100)*parseFloat(convert_to_string(harga)*parseFloat(qty));
                 	var tblds = '<td class="atas"><input id="dsk'+lastRow+'" class="kanan" value="'+convert_to_numeric(jmhdiskon)+'" disabled="disabled"/></td>';
                     var jumlah = (parseFloat(qty)*parseFloat(harga))-parseFloat(jmhdiskon);
                     var tbljm = '<td class="atas"><input id="jmh'+lastRow+'" class="kanan" value="'+convert_to_numeric(jumlah)+'" disabled="disabled"/></td>';
@@ -865,7 +865,7 @@ function SimpanKasirBaru()
 function print_faktur(faktur)
 {
     $.post(base_url + 'index.php/kasir/cetak_dari_faktur/'+faktur+'/kasir',function(data)
-    { console.log(base_url + 'index.php/kasir/cetak_dari_faktur/'+faktur+'/kasir');
+    {
         window.location=window.location;
     })
     .error(function(){alert("Error Printer!");});
