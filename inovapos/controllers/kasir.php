@@ -885,15 +885,16 @@ class Kasir extends CI_Controller
         $printer->text("\n");
         $printer->feed(4); // mencetak 2 baris kosong, agar kertas terangkat ke atas
         $printer->close();
-
+        
         // printer_write($handle,$cetak);
         // printer_end_page($handle);
         // printer_end_doc($handle);
         // printer_close($handle);
-        if($balik=='')
-        {
+        // if($balik=='')
+        // {
             redirect('laporan/penjualan');
-        }
+        // }
+        
     }
     function cetak_screen()
     {

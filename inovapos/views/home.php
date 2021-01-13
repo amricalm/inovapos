@@ -37,7 +37,7 @@
                 </div>
                 <div style="clear:both;"></div>
             </div>
-            <!-- <div class="grid_5">
+            <div class="grid_5">
                 <div class="module">
                         <h2><span></span></h2>
                         <div class="module-body">
@@ -50,7 +50,7 @@
                         </div>
                 </div>
                 <div style="clear:both;"></div>
-            </div> -->
+            </div>
             <div style="clear:both;"></div>
             <script type="text/javascript">
                 setTimeout("Redirect()",5000); 
