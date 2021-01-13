@@ -34,6 +34,33 @@ class History_kasir_model extends CI_Model
 
         return $this->db->query($sql);
     }
+    function penjualan_excel($tgl=0,$shift=0,$grup='',$cari='',$limit='',$offset='')
+    {
+        $etgl               = explode('-',$tgl);
+        
+        $tglsesudahnya      = 
+        $sql = "SELECT dtl.no_faktur,brg.barang_kd,brg.barang_nm , dtl.qty, dtl.harga, dtl.jmh
+                FROM ac_tjual_dtl dtl
+                INNER JOIN ac_tjual hdr
+                ON dtl.no_faktur = hdr.no_faktur
+                INNER JOIN im_mbarang brg
+                ON dtl.kd_barang = brg.barang_kd
+                LEFT OUTER JOIN im_mgroup_barang
+                ON group_kd=barang_group
+                WHERE date(tgl) = '$tgl'
+                AND shift = $shift ";
+        $sql    .= ($grup!='') ? " AND barang_group = '$grup'" : '';
+        $sql    .= ($cari!='') ? " AND (brg.barang_nm LIKE '%$cari%' " : '';
+        $sql    .= ($cari!='') ? " OR brg.barang_kd LIKE '%$cari%' " : '';
+        $sql    .= ($cari!='') ? " OR dtl.no_faktur LIKE '%$cari%') " : '';
+        $sql    .= " ORDER BY barang_kd "; 
+        if($limit!='') 
+        {
+            $sql .= " limit $limit offset $offset ";
+        }
+        
+        return $this->db->query($sql);
+    }
     function penjualan_dtl($barang=0,$tgl=0,$shift=0)
     {
         $sql = "SELECT brg.barang_kd,brg.barang_nm,dtl.no_faktur,dtl.qty, dtl.harga, (dtl.qty*dtl.harga) jmh 
@@ -113,7 +140,7 @@ class History_kasir_model extends CI_Model
             $stgldari                       = " AND DATE(tgl) >= '' ";
             $stglsampai                     = " AND DATE(tgl) <= '' ";
         }
-        $sql = " SELECT barang_kd,barang_nm,IFNULL(SUM(qty),0) jumlah,harga,tgl
+        $sql = " SELECT hdr.no_faktur,barang_kd,barang_nm,IFNULL(SUM(qty),0) jumlah,harga,tgl
                 FROM im_mbarang
                 LEFT OUTER JOIN history_ac_tjual_dtl dtl
                 ON barang_kd = dtl.kd_barang

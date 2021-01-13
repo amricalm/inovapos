@@ -7,14 +7,19 @@
                     <tr>
                         <td width="35%">Pilih Kelompok Barang</td>
                         <td><?php $grup=array(''=>'');foreach($data_group->result() as $rowgroup) : $grup[$rowgroup->group_kd]=$rowgroup->group_nm; endforeach; echo form_dropdown('grup',$grup,$cbogrup,'id="grup" class="input-medium"'); ?></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Pencarian Kode atau Nama</td>
                         <td><input type="text" name="search" id="search" class="input-medium" value="<?php echo $txtcari; ?>" /></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><input class="submit-green" type="submit" name="submit" value="Cari" />&nbsp;&nbsp;&nbsp;<a href="<?php echo base_url().'index.php/laporan/penjualan_per_faktur' ?>" class="submit-green">Per Faktur</a></td>
+                        <?php if($data->num_rows() > 0) { ?>
+                            <td style="text-align: right;"><a href="<?php echo base_url() ?>index.php/export/export_penjualan" class="submit-green" style="text-decoration:none;"><img src="<?php echo base_url() ?>/inovapos_asset/img/excel.png"> Unduh Laporan</a></td>
+                        <?php } ?>
                     </tr>
                 </table>
             </form>

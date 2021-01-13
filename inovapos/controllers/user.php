@@ -105,9 +105,12 @@ class User extends CI_Controller
                 $cek                            = $this->user_model->get($user_kd,'','','','');
                 if($cek->num_rows()>0)
                 {
-                    if($this->user_model->user_update($user_kd,$input))
-                    {
-                        echo '<script type="text/javascript">alert("Berhasil disimpan");window.parent.iclose();</script>';
+                    if($input['user_nm'] != '' || $input['user_group'] != '' || $input['user_password'] != '' || $input['user_outlet'] != '' ) {
+                        if($this->user_model->user_update($user_kd,$input))
+                        {
+                            
+                            echo '<script type="text/javascript">alert("Berhasil disimpan");window.parent.iclose();</script>';
+                        }
                     }
                 }  
                 else

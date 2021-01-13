@@ -22,7 +22,7 @@
             <tr>
                 <td width="35%">Pilih Kelompok Barang</td>
                 <td><?php $grup=array(''=>'');foreach($data_group->result() as $rowgroup) : $grup[$rowgroup->group_kd]=$rowgroup->group_nm; endforeach; echo form_dropdown('grup',$grup,$cbogrup,'id="grup" class="input-medium"'); ?></td>
-                <td rowspan="3" style="vertical-align:bottom"><a href="<?php echo base_url().'index.php/barang/cetak_stok' ?>" class="submit-green" style="padding-top:10px"><img src="<?php echo $base_img.'/print.png' ?>" /></a><br/>Cetak Stok</td>
+                <td rowspan="3" style="text-align:right; vertical-align:bottom;"><a href="<?php echo base_url() ?>index.php/export/export_kartu_stok" class="submit-green" style="text-decoration:none;"><img src="<?php echo base_url() ?>/inovapos_asset/img/excel.png"> Unduh Kartu Stok</a></td>
             </tr>
             <tr>
                 <td>Pencarian Kode atau Nama</td>

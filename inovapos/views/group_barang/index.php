@@ -1,9 +1,9 @@
 <div class="grid_12">
-    <!--<div class="float-right">
-        <a href="<?php echo base_url() ?>index.php/pelanggan/pelanggan_form/tambah?iframe=true&amp;width=800&amp;height=600" rel="prettyPhoto[iframe]" class="button">
+    <div class="float-right">
+        <a href="<?php echo base_url() ?>index.php/group_barang/group_form/tambah?iframe=true&amp;width=800&amp;height=600" rel="prettyPhoto[iframe]" class="button">
         	<span>Tambah Group Barang <img src="<?php echo $base_img ?>/plus-small.gif" width="12" height="9" /></span>
         </a>
-    </div>-->
+    </div>
     <form action="<?php echo base_url() ?>index.php/group_barang/daftar" method="POST"><input type="text" name="search" id="search" class="input-short" value="<?php echo $txtcari; ?>" /><input class="submit-green" type="submit" name="submit" value="Cari" /></form>
     <div class="module">
     	<h2><span>Daftar Group Barang</span></h2>
@@ -20,15 +20,15 @@
                 <tbody>
                     <?php
                         $seq = 1 + $this->uri->segment(3);
-                        foreach($data->result() as $rowpelanggan)
+                        foreach($data->result() as $rowgroup)
                         {
                     ?>
                     <tr>
                         <td class="align-center"><?php echo $seq ?></td>
-                        <td><?php echo $rowpelanggan->group_nm ?></td>
+                        <td><?php echo $rowgroup->group_nm ?></td>
                         <td>
-                            <!--<a href="<?php echo base_url() ?>index.php/pelanggan/pelanggan_form/edit/<?php echo $rowpelanggan->pelanggan_kd; ?>?iframe=true&amp;width=800&amp;height=600" rel="prettyPhoto[iframe]"><img src="<?php echo $base_img ?>/pencil.gif" width="16" height="16" /></a>
-                            <a href="<?php echo base_url() ?>index.php/pelanggan/pelanggan_form/hapus/<?php echo $rowpelanggan->pelanggan_kd; ?>" onclick="return hapus()"><img src="<?php echo $base_img ?>/bin.gif" width="16" height="16" alt="delete" /></a>-->
+                            <a href="<?php echo base_url() ?>index.php/group_barang/group_form/edit/<?php  echo $rowgroup->group_kd; ?>?iframe=true&amp;width=800&amp;height=600" rel="prettyPhoto[iframe]"><img src="<?php echo $base_img ?>/pencil.gif" width="16" height="16" /></a>
+                            <a href="<?php echo base_url() ?>index.php/group_barang/group_form/hapus/<?php echo $rowgroup->group_kd; ?>" onclick="return hapus()"><img src="<?php echo $base_img ?>/bin.gif" width="16" height="16" alt="delete" /></a>
                         </td>
                     </tr>
                     <?php 

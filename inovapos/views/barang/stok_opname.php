@@ -18,7 +18,7 @@
                         echo form_dropdown('group_barang',$groupbarang,$kdgroup,'id="group_barang" class="input-short"') 
                     ?>
                 </td>
-                <td rowspan="4" style="vertical-align:bottom;text-align:center"><a href="javascript:downloadfile()" class="submit-green" style="padding-top:10px"><img src="<?php echo $base_img.'/print.png' ?>" /></a><br/>Download File Stok Awal</td>
+                <td rowspan="4" style="vertical-align:bottom;text-align:right"><a href="<?php echo base_url() ?>index.php/export/export_stok_awal" class="submit-green" style="text-decoration:none;"><img src="<?php echo base_url() ?>/inovapos_asset/img/excel.png"> Unduh Stok Awal</a></td>
             </tr>
             <tr>
                 <td>Tanggal</td>
@@ -48,7 +48,7 @@
     <?php echo form_hidden('shift',$shift); ?>
     
     <?php echo form_hidden('url',base_url().'index.php/'.$this->uri->uri_string()) ?>
-<div class="notification none renggang">Tekan <span style="color: red;">F12</span> untuk menyimpan.</div>
+<div class="notification none renggang">Tekan <span style="color: red;">F12</span> untuk menyimpan. <?php echo $this->uri->segment(5)  ?></div>
     
     <div class="module">
     	<h2><span>Daftar Barang</span></h2>

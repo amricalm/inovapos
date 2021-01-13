@@ -16,6 +16,7 @@
                             <div style="font-size:24px"><?php $jmhall = 0; foreach($data_all->result() as $rowall){$jmhall += $rowall->jumlah;} echo $jmhall; ?></div>
                             <strong>Total Penjualan</strong> : <br />
                             <div style="font-size:24px"><?php $jmhall = 0; foreach($data_all->result() as $rowall){$jmhall += ($rowall->jumlah*$rowall->harga);} echo number_format($jmhall,0,',','.'); ?></div>
+                            <div><a href="<?php echo base_url() ?>index.php/export/export_rekap_penjualan" class="submit-green" style="text-decoration:none;"><img src="<?php echo base_url() ?>/inovapos_asset/img/excel.png"> Unduh Laporan</a></div>
                             <?php } ?>
                         </td>
                     </tr> 
@@ -41,12 +42,13 @@
             	<thead>
                     <tr>
                         <th style="width:2%;text-align:center;">#</th>
-                        <th style="width:9%">Kode Barang</th>
-                        <th style="width:20%">Nama Barang</th>
-                        <th style="width:12%">Tanggal</th>
-                        <th style="width:5%">Qty</th>
+                        <th style="width:8%">Tanggal</th>
+                        <th style="width:10%">No Faktur</th>
+                        <th style="width:8%">Kode Barang</th>
+                        <th style="width:36%">Nama Barang</th>
+                        <th style="width:6%">Qty</th>
                         <th style="width:15%">Harga</th>
-                        <th style="width:18%">Total</th>
+                        <th style="width:15%">Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,9 +61,10 @@
                     ?>
                     <tr>
                         <td class="align-center"><?php echo $seq ?></td>
+                        <td><?php echo $row->tgl ?></td>
+                        <td><?php echo $row->no_faktur ?></td>
                         <td><?php echo $row->barang_kd ?></td>
                         <td><?php echo $row->barang_nm ?></td>
-                        <td><?php echo $row->tgl ?></td>
                         <td><?php echo $row->jumlah ?></td>
                         <td style="text-align: right;"><?php echo number_format($row->harga,0,',','.'); ?></td>
                         <td style="text-align: right;"><?php echo number_format(($row->harga*$row->jumlah),0,',','.'); ?></td>
