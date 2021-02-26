@@ -43,7 +43,7 @@
                 <tr><td>&nbsp;</td></tr>
                 <tr>
                     <td>Qty</td>
-                    <td><input type="text" name="qty" id="qty" class="qty1000 input-long " /></td>
+                    <td><input type="text" name="qty" id="qty" class="qty input-long " /></td>
                     <td>Satuan</td>
                     <td><input type="text" name="barang_satuan" id="barang_satuan" class="input-long" disabled="disabled" /></td>
                     <td>Harga</td>

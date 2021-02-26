@@ -65,7 +65,7 @@
                         <td>Harga</td>
                         <td><input type="text" name="barang_harga" id="barang_harga" class="input-long" disabled="disabled" /></td>
                         <td>Qty</td>
-                        <td><input type="text" name="qty" id="qty" class="qty1000 input-long " /></td>
+                        <td><input type="text" name="qty" id="qty" class="qty input-long " /></td>
                         <!--<td>Diskon</td>
                         <td><input type="text" name="diskon" id="diskon" class="qty100 input-long " />&nbsp;(%)</td>
                         <td><input type="checkbox" id="cbxPelanggan" name="cbxPelanggan" /></td>
